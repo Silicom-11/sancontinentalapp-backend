@@ -1,0 +1,941 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+<meta charset="UTF-8">
+<title>Modelo de Datos - IEP Continental Americano</title>
+<script src="https://cdn.jsdelivr.net/npm/mermaid@10/dist/mermaid.min.js"></script>
+<style>
+body{font-family:Segoe UI,sans-serif;background:#f5f6f7;margin:0}
+header{background:linear-gradient(135deg,#1a237e,#1565c0);color:#fff;padding:2rem;text-align:center}
+header h1{margin:0;font-size:1.8rem}
+header p{margin:.3rem 0 0;opacity:.9}
+.container{max-width:1400px;margin:0 auto;padding:1.5rem}
+.tabs{display:flex;gap:.5rem;margin-bottom:1rem}
+.tab{padding:.7rem 1.5rem;border:none;background:#fff;font-size:.95rem;font-weight:600;cursor:pointer;border-radius:8px 8px 0 0;border-bottom:3px solid transparent}
+.tab.active{color:#1565c0;border-bottom-color:#1565c0}
+.panel{display:none;background:#fff;border-radius:0 8px 8px 8px;padding:1.5rem;box-shadow:0 2px 12px rgba(0,0,0,.08);overflow-x:auto}
+.panel.active{display:block}
+.mermaid{display:flex;justify-content:center}
+.instructions{background:#e3f2fd;border-left:4px solid #1565c0;padding:1rem;margin-bottom:1rem;border-radius:0 6px 6px 0;font-size:.9rem;color:#0d47a1}
+.footer{text-align:center;padding:2rem;color:#888;font-size:.8rem}
+</style>
+</head>
+<body>
+<header>
+<h1>Modelo de Datos - IEP Continental Americano</h1>
+<p>New Backend | Spring Boot 3.2.5 + Java 17 + MongoDB | 21 Colecciones</p>
+</header>
+<div class="container">
+<div class="instructions">
+<strong>Como usar:</strong> Haz clic en las pestanas. Para exportar: Ctrl+P &gt; Guardar como PDF.
+</div>
+<div class="tabs">
+<button class="tab active" onclick="showPanel(0)">1. Conceptual</button>
+<button class="tab" onclick="showPanel(1)">2. Logico</button>
+<button class="tab" onclick="showPanel(2)">3. Fisico</button>
+</div>
+
+<!-- CONCEPTUAL -->
+<div class="panel active">
+<h2 style="margin-bottom:1rem;color:#1a237e">Modelo Conceptual</h2>
+<div class="mermaid">
+erDiagram
+    INSTITUCION ||--o{ ANIO_ACADEMICO : tiene
+    INSTITUCION ||--o{ NIVEL_GRADO : define
+    INSTITUCION ||--o{ ASIGNATURA : imparte
+    INSTITUCION ||--o{ DOCENTE : emplea
+    ANIO_ACADEMICO ||--o{ AULA : contiene
+    ANIO_ACADEMICO ||--o{ SECCION_CURSO : programa
+    ANIO_ACADEMICO ||--o{ MATRICULA : recibe
+    NIVEL_GRADO ||--o{ AULA : agrupa
+    NIVEL_GRADO ||--o{ ASIGNATURA : estudia
+    AULA ||--o{ SECCION_CURSO : aloja
+    AULA ||--o{ MATRICULA : matricula
+    ASIGNATURA ||--o{ SECCION_CURSO : se_imparte
+    USUARIO ||--|| ESTUDIANTE : es
+    USUARIO ||--|| DOCENTE : es
+    USUARIO ||--|| PADRE : es
+    ESTUDIANTE ||--o{ MATRICULA : se_matricula
+    ESTUDIANTE ||--o{ NOTA : obtiene
+    ESTUDIANTE ||--o{ ASISTENCIA : registra
+    ESTUDIANTE ||--o{ JUSTIFICACION : presenta
+    ESTUDIANTE ||--o{ UBICACION : reporta
+    DOCENTE ||--o{ CURSO : dicta
+    DOCENTE ||--o{ AULA : tutorea
+    DOCENTE ||--o{ NOTA : califica
+    DOCENTE ||--o{ ASISTENCIA : toma
+    DOCENTE ||--o{ EVALUACION : crea
+    DOCENTE ||--o{ SECCION_CURSO : ensenia
+    CURSO ||--o{ NOTA : genera
+    CURSO ||--o{ ASISTENCIA : registra
+    CURSO ||--o{ EVALUACION : contiene
+    PADRE ||--o{ ESTUDIANTE : apoderado
+    PADRE ||--o{ JUSTIFICACION : solicita
+    USUARIO ||--o{ NOTIFICACION : recibe
+    USUARIO ||--o{ UBICACION : reporta
+    USUARIO ||--o{ EVENTO : organiza
+    USUARIO ||--o{ CONVERSACION : participa
+    USUARIO ||--o{ MENSAJE : envia
+    CONVERSACION ||--o{ MENSAJE : contiene
+</div>
+</div>
+
+<!-- LOGICO -->
+<div class="panel">
+<h2 style="margin-bottom:1rem;color:#1a237e">Modelo Logico - Atributos, Claves e Indices</h2>
+<div class="mermaid">
+erDiagram
+    USUARIO {
+        string id PK
+        string nombre
+        string apellido
+        string email UK
+        string dni UK
+        string contrasena
+        string telefono
+        string rol
+        string foto
+        object direccion
+        boolean activo
+        boolean verificado
+        date ultimoLogin
+        string perfilEstudiante FK
+        object hijos
+        object permisos
+        object tokensPush
+        object ajustes
+        object ultimaUbicacion
+        boolean enLinea
+        int intentosLogin
+        date bloqueoHasta
+        date createdAt
+        date updatedAt
+    }
+    INSTITUCION {
+        string id PK
+        string nombre
+        string codigo UK
+        string logo
+        object direccion
+        string telefono
+        string email
+        string sitioWeb
+        string director FK
+        object sistemaEval
+        object escalaNotas
+        object turnos
+        object horariosTurno
+        object nivelesAcad
+        int maxSecciones
+        int capacidadDefault
+        object tiposEval
+        object pesosDefault
+        boolean activo
+        date createdAt
+        date updatedAt
+    }
+    ESTUDIANTE {
+        string id PK
+        string nombre
+        string apellido
+        string dni UK
+        string email UK
+        string telefono
+        date fechaNac
+        string genero
+        string foto
+        object direccion
+        string grado
+        string seccion
+        string codEstudiante UK
+        string numMatricula UK
+        object apoderados
+        object infoMedica
+        object documentos
+        string estado
+        boolean activo
+        string idUsuario FK
+        date createdAt
+        date updatedAt
+    }
+    DOCENTE {
+        string id PK
+        string nombre
+        string apellido
+        string dni UK
+        string email UK
+        string telefono
+        string telefono2
+        date fechaNac
+        string genero
+        string foto
+        object direccion
+        string codEmpleado UK
+        string especialidad
+        string gradoAcad
+        string tituloProf
+        object certificaciones
+        string tipoContrato
+        date fechaInicioContr
+        date fechaFinContr
+        double salario
+        object cuentaBanco
+        object documentos
+        boolean activo
+        string idUsuario FK
+        string idInstitucion FK
+        date createdAt
+        date updatedAt
+    }
+    PADRE {
+        string id PK
+        string nombre
+        string apellido
+        string dni UK
+        string email UK
+        string telefono
+        string telefono2
+        date fechaNac
+        string genero
+        string foto
+        object direccion
+        string ocupacion
+        string lugarTrabajo
+        object hijos
+        object preferencias
+        object documentos
+        object tokensPush
+        boolean activo
+        boolean verificado
+        date ultimoLogin
+        date ultimoActivo
+        boolean enLinea
+        string idUsuario FK
+        string notasInternas
+        date createdAt
+        date updatedAt
+    }
+    ANIO_ACADEMICO {
+        string id PK
+        string idInstitucion FK
+        int anio
+        string nombre
+        date fechaInicio
+        date fechaFin
+        object periodos
+        object fechasImportantes
+        boolean actual
+        string estado
+        object estadisticas
+        boolean activo
+        date createdAt
+        date updatedAt
+    }
+    NIVEL_GRADO {
+        string id PK
+        string idInstitucion FK
+        string nombre
+        string nombreCorto
+        int nivel
+        string tipo
+        int orden
+        string descripcion
+        boolean activo
+        date createdAt
+        date updatedAt
+    }
+    ASIGNATURA {
+        string id PK
+        string idInstitucion FK
+        string nombre
+        string codigo UK
+        string descripcion
+        object niveles FK
+        string aplicableA
+        int horasSemana
+        boolean obligatoria
+        string area
+        object pesosDefault
+        object competencias
+        string color
+        string icono
+        int orden
+        boolean activo
+        date createdAt
+        date updatedAt
+    }
+    AULA {
+        string id PK
+        string idNivel FK
+        string idAnio FK
+        string seccion
+        string turno
+        string tutor FK
+        int capacidad
+        object ubicacion
+        object estadisticas
+        boolean activo
+        date createdAt
+        date updatedAt
+    }
+    CURSO {
+        string id PK
+        string nombre
+        string codigo UK
+        string descripcion
+        string grado
+        string seccion
+        string idDocente FK
+        object estudiantes FK
+        object horario
+        object pesosEval
+        int anioAcad
+        string periodo
+        boolean activo
+        date createdAt
+        date updatedAt
+    }
+    SECCION_CURSO {
+        string id PK
+        string idAsignatura FK
+        string idAula FK
+        string idDocente FK
+        string idAnio FK
+        object horario
+        object pesosEval
+        object evalPeriodo
+        object estadisticas
+        object recursos
+        object estudiantes FK
+        boolean activo
+        date createdAt
+        date updatedAt
+    }
+    MATRICULA {
+        string id PK
+        string idEstudiante FK
+        string idAula FK
+        string idAnio FK
+        date fechaMatricula
+        string numMatricula UK
+        string estado
+        date fechaEstado
+        string motivoEstado
+        string tipoMatricula
+        object historialEstado
+        object documentos
+        string aulaPrevia FK
+        string colegioPrevio
+        string observaciones
+        string matriculadoPor FK
+        boolean activo
+        date createdAt
+        date updatedAt
+    }
+    NOTA {
+        string id PK
+        string idEstudiante FK
+        string idCurso FK
+        int bimestre
+        int anioAcad
+        object puntajes
+        double promedio
+        string estado
+        date fechaCierre
+        string cerradoPor
+        date fechaPublicacion
+        string idDocente FK
+        date createdAt
+        date updatedAt
+    }
+    ASISTENCIA {
+        string id PK
+        string idEstudiante FK
+        string idCurso FK
+        string idDocente FK
+        date fecha
+        string estado
+        string horaLlegada
+        string observaciones
+        string idJustificacion FK
+        date createdAt
+        date updatedAt
+    }
+    EVALUACION {
+        string id PK
+        string idCurso FK
+        string idDocente FK
+        string nombre
+        string tipo
+        int bimestre
+        double notaMax
+        double peso
+        date fecha
+        string descripcion
+        int anioAcad
+        boolean activo
+        int orden
+        date createdAt
+        date updatedAt
+    }
+    EVENTO {
+        string id PK
+        string titulo
+        string fecha
+        string hora
+        string tipo
+        string descripcion
+        string lugar
+        string participantes
+        boolean notifEst
+        boolean notifPadres
+        boolean notifDocentes
+        string creadoPor FK
+        boolean activo
+        date createdAt
+        date updatedAt
+    }
+    JUSTIFICACION {
+        string id PK
+        string idEstudiante FK
+        string idPadre FK
+        object fechas
+        string motivo
+        string observaciones
+        object documentos
+        object cursosAfect FK
+        string estado
+        string revisadoPor FK
+        date fechaRevision
+        string notaRevision
+        date createdAt
+        date updatedAt
+    }
+    UBICACION {
+        string id PK
+        string idUsuario FK
+        object coordenadas
+        object infoDispositivo
+        string estadoSesion
+        string tipoActualiz
+        object direccion
+        double nivelBateria
+        string tipoRed
+        date timestampCliente
+        date createdAt
+        date updatedAt
+    }
+    CONVERSACION {
+        string id PK
+        object participantes FK
+        string tipo
+        string nombre
+        object ultimoMensaje
+        object sinLeer
+        boolean activo
+        object metadata
+        date createdAt
+        date updatedAt
+    }
+    MENSAJE {
+        string id PK
+        string idConvers FK
+        string idRemitente FK
+        string contenido
+        string tipo
+        object adjuntos
+        object leidoPor
+        boolean eliminado
+        date createdAt
+        date updatedAt
+    }
+    NOTIFICACION {
+        string id PK
+        string idDestinatario FK
+        string titulo
+        string mensaje
+        string tipo
+        object datos
+        boolean leido
+        date fechaLectura
+        date fechaExpira
+        date createdAt
+        date updatedAt
+    }
+
+    USUARIO ||--o| ESTUDIANTE : perfil
+    USUARIO ||--o| DOCENTE : perfil
+    USUARIO ||--o| PADRE : perfil
+    INSTITUCION ||--o{ ANIO_ACADEMICO : ""
+    INSTITUCION ||--o{ NIVEL_GRADO : ""
+    INSTITUCION ||--o{ ASIGNATURA : ""
+    INSTITUCION ||--o{ DOCENTE : ""
+    ANIO_ACADEMICO ||--o{ AULA : ""
+    ANIO_ACADEMICO ||--o{ SECCION_CURSO : ""
+    ANIO_ACADEMICO ||--o{ MATRICULA : ""
+    NIVEL_GRADO ||--o{ AULA : ""
+    NIVEL_GRADO ||--o{ ASIGNATURA : ""
+    AULA ||--o{ SECCION_CURSO : ""
+    AULA ||--o{ MATRICULA : ""
+    ASIGNATURA ||--o{ SECCION_CURSO : ""
+    ESTUDIANTE ||--o{ MATRICULA : ""
+    ESTUDIANTE ||--o{ NOTA : ""
+    ESTUDIANTE ||--o{ ASISTENCIA : ""
+    ESTUDIANTE ||--o{ JUSTIFICACION : ""
+    DOCENTE ||--o{ CURSO : ""
+    DOCENTE ||--o{ AULA : tutorea
+    DOCENTE ||--o{ NOTA : ""
+    DOCENTE ||--o{ ASISTENCIA : ""
+    DOCENTE ||--o{ EVALUACION : ""
+    DOCENTE ||--o{ SECCION_CURSO : ""
+    CURSO ||--o{ NOTA : ""
+    CURSO ||--o{ ASISTENCIA : ""
+    CURSO ||--o{ EVALUACION : ""
+    PADRE ||--o{ JUSTIFICACION : ""
+    USUARIO ||--o{ EVENTO : ""
+    USUARIO ||--o{ UBICACION : ""
+    USUARIO ||--o{ CONVERSACION : ""
+    USUARIO ||--o{ MENSAJE : ""
+    USUARIO ||--o{ NOTIFICACION : ""
+    CONVERSACION ||--o{ MENSAJE : ""
+</div>
+</div>
+
+<!-- FISICO -->
+<div class="panel">
+<h2 style="margin-bottom:1rem;color:#1a237e">Modelo Fisico - MongoDB Documental</h2>
+<div class="mermaid">
+erDiagram
+    users {
+        string id PK
+        string firstName
+        string lastName
+        string email UK
+        string dni UK
+        string password
+        string phone
+        string role
+        string photo
+        object address EMB
+        boolean isActive
+        boolean isVerified
+        date lastLogin
+        string studentProfile FK
+        object children EMB
+        object permissions
+        object pushTokens EMB
+        object settings EMB
+        object lastKnownLocation EMB
+        boolean isOnline
+        int loginAttempts
+        date lockUntil
+        date createdAt
+        date updatedAt
+    }
+    institutions {
+        string id PK
+        string name
+        string code UK
+        string logo
+        object address EMB
+        string phone
+        string email
+        string website
+        string director FK
+        object evaluationSystem EMB
+        object gradeScale EMB
+        object shifts
+        object shiftSchedules EMB
+        object academicLevels EMB
+        int maxSectionsPerGrade
+        int defaultClassroomCapacity
+        object evaluationTypes
+        object defaultEvaluationWeights EMB
+        boolean isActive
+        date createdAt
+        date updatedAt
+    }
+    students {
+        string id PK
+        string firstName
+        string lastName
+        string dni UK
+        string email UK
+        string password
+        string phone
+        date birthDate
+        string gender
+        string photo
+        object address EMB
+        string gradeLevel
+        string section
+        string studentCode UK
+        string enrollmentNumber UK
+        object guardians EMB
+        object medicalInfo EMB
+        object documents EMB
+        string status
+        boolean isActive
+        string userId FK
+        date createdAt
+        date updatedAt
+    }
+    teachers {
+        string id PK
+        string firstName
+        string lastName
+        string dni UK
+        string email UK
+        string password
+        string phone
+        string secondaryPhone
+        date birthDate
+        string gender
+        string photo
+        object address EMB
+        string employeeCode UK
+        string specialty
+        string academicDegree
+        string professionalTitle
+        object certifications EMB
+        string contractType
+        date contractStartDate
+        date contractEndDate
+        double salary
+        object bankAccount EMB
+        object documents EMB
+        boolean isActive
+        string userId FK
+        string institution FK
+        date createdAt
+        date updatedAt
+    }
+    parents {
+        string id PK
+        string firstName
+        string lastName
+        string dni UK
+        string email UK
+        string password
+        string phone
+        string secondaryPhone
+        date birthDate
+        string gender
+        string photo
+        object address EMB
+        string occupation
+        string workplace
+        string workPhone
+        object children EMB
+        object notifications EMB
+        object documents EMB
+        object pushTokens EMB
+        boolean isActive
+        boolean isVerified
+        date lastLogin
+        date lastActive
+        boolean isOnline
+        string userId FK
+        string internalNotes
+        date createdAt
+        date updatedAt
+    }
+    academicyears {
+        string id PK
+        string institution FK
+        int year
+        string name
+        date startDate
+        date endDate
+        object periods EMB
+        object importantDates EMB
+        boolean isCurrent
+        string status
+        object stats EMB
+        boolean isActive
+        date createdAt
+        date updatedAt
+    }
+    gradelevels {
+        string id PK
+        string institution FK
+        string name
+        string shortName
+        int level
+        string type
+        int order
+        string description
+        boolean isActive
+        date createdAt
+        date updatedAt
+    }
+    subjects {
+        string id PK
+        string institution FK
+        string name
+        string code UK
+        string description
+        object gradeLevels FK
+        string applicableTo
+        int hoursPerWeek
+        boolean isRequired
+        string area
+        object defaultWeights EMB
+        object competencies EMB
+        string color
+        string icon
+        int order
+        boolean isActive
+        date createdAt
+        date updatedAt
+    }
+    classrooms {
+        string id PK
+        string gradeLevel FK
+        string academicYear FK
+        string section
+        string shift
+        string tutor FK
+        int capacity
+        object location EMB
+        object stats EMB
+        boolean isActive
+        date createdAt
+        date updatedAt
+    }
+    courses {
+        string id PK
+        string name
+        string code UK
+        string description
+        string gradeLevel
+        string section
+        string teacher FK
+        object students FK
+        object schedule EMB
+        object evaluationWeights EMB
+        int academicYear
+        string period
+        boolean isActive
+        date createdAt
+        date updatedAt
+    }
+    coursesections {
+        string id PK
+        string subject FK
+        string classroom FK
+        string teacher FK
+        string academicYear FK
+        object schedule EMB
+        object evaluationWeights EMB
+        object periodEvaluations EMB
+        object stats EMB
+        object resources EMB
+        object students FK
+        boolean isActive
+        date createdAt
+        date updatedAt
+    }
+    enrollments {
+        string id PK
+        string student FK
+        string classroom FK
+        string academicYear FK
+        date enrollmentDate
+        string enrollmentNumber UK
+        string status
+        date statusDate
+        string statusReason
+        string enrollmentType
+        object statusHistory EMB
+        object documents EMB
+        string previousClassroom FK
+        string previousSchool
+        string observations
+        string enrolledBy FK
+        boolean isActive
+        date createdAt
+        date updatedAt
+    }
+    grades {
+        string id PK
+        string student FK
+        string course FK
+        int bimester
+        int academicYear
+        object scores EMB
+        double average
+        string status
+        date closedAt
+        string closedBy
+        date publishedAt
+        string teacher FK
+        date createdAt
+        date updatedAt
+    }
+    attendances {
+        string id PK
+        string student FK
+        string course FK
+        string teacher FK
+        date date
+        string status
+        string arrivalTime
+        string observations
+        string justification FK
+        date createdAt
+        date updatedAt
+    }
+    evaluations {
+        string id PK
+        string course FK
+        string teacher FK
+        string name
+        string type
+        int bimester
+        double maxGrade
+        double weight
+        date date
+        string description
+        int academicYear
+        boolean isActive
+        int order
+        date createdAt
+        date updatedAt
+    }
+    events {
+        string id PK
+        string title
+        string date
+        string time
+        string type
+        string description
+        string location
+        string participants
+        boolean notifyStudents
+        boolean notifyParents
+        boolean notifyTeachers
+        string createdBy FK
+        boolean isActive
+        date createdAt
+        date updatedAt
+    }
+    justifications {
+        string id PK
+        string student FK
+        string parent FK
+        object dates
+        string reason
+        string observations
+        object documents EMB
+        object coursesAffected FK
+        string status
+        string reviewedBy FK
+        date reviewedAt
+        string reviewNote
+        date createdAt
+        date updatedAt
+    }
+    locations {
+        string id PK
+        string user FK
+        object coordinates EMB
+        object deviceInfo EMB
+        string sessionStatus
+        string updateType
+        object address EMB
+        double batteryLevel
+        string networkType
+        date clientTimestamp
+        date createdAt
+        date updatedAt
+    }
+    conversations {
+        string id PK
+        object participants FK
+        string type
+        string name
+        object lastMessage EMB
+        object unreadCount
+        boolean isActive
+        object metadata EMB
+        date createdAt
+        date updatedAt
+    }
+    messages {
+        string id PK
+        string conversation FK
+        string sender FK
+        string content
+        string type
+        object attachments EMB
+        object readBy EMB
+        boolean isDeleted
+        date createdAt
+        date updatedAt
+    }
+    notifications {
+        string id PK
+        string recipient FK
+        string title
+        string message
+        string type
+        object data EMB
+        boolean isRead
+        date readAt
+        date expiresAt
+        date createdAt
+        date updatedAt
+    }
+
+    users ||--o| students : studentProfile
+    users ||--o| teachers : userId
+    users ||--o| parents : userId
+    institutions ||--o{ academicyears : institution
+    institutions ||--o{ gradelevels : institution
+    institutions ||--o{ subjects : institution
+    institutions ||--o{ teachers : institution
+    academicyears ||--o{ classrooms : academicYear
+    academicyears ||--o{ coursesections : academicYear
+    academicyears ||--o{ enrollments : academicYear
+    gradelevels ||--o{ classrooms : gradeLevel
+    gradelevels ||--o{ subjects : gradeLevels
+    classrooms ||--o{ coursesections : classroom
+    classrooms ||--o{ enrollments : classroom
+    subjects ||--o{ coursesections : subject
+    students ||--o{ enrollments : student
+    students ||--o{ grades : student
+    students ||--o{ attendances : student
+    students ||--o{ justifications : student
+    teachers ||--o{ courses : teacher
+    teachers ||--o{ grades : teacher
+    teachers ||--o{ attendances : teacher
+    teachers ||--o{ evaluations : teacher
+    teachers ||--o{ coursesections : teacher
+    courses ||--o{ grades : course
+    courses ||--o{ attendances : course
+    courses ||--o{ evaluations : course
+    parents ||--o{ justifications : parent
+    users ||--o{ events : createdBy
+    users ||--o{ locations : user
+    users ||--o{ conversations : participants
+    users ||--o{ messages : sender
+    users ||--o{ notifications : recipient
+    conversations ||--o{ messages : conversation
+</div>
+</div>
+
+</div>
+<div class="footer">
+<p>Generado para el proyecto <strong>IEP Continental Americano - Backend Java</strong></p>
+<p>Spring Boot 3.2.5 + Java 17 + MongoDB | 21 Colecciones</p>
+</div>
+<script>
+mermaid.initialize({startOnLoad:true,theme:'default',er:{useMaxWidth:true,diagramPadding:20}});
+function showPanel(i){
+  document.querySelectorAll('.tab').forEach((t,j)=>t.classList.toggle('active',j===i));
+  document.querySelectorAll('.panel').forEach((p,j)=>p.classList.toggle('active',j===i));
+}
+</script>
+</body>
+</html>

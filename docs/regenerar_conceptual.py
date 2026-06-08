@@ -1,0 +1,123 @@
+import subprocess
+
+dot_path = r"C:\Program Files\Graphviz\bin\dot.exe"
+
+conceptual = r'''
+digraph ModeloConceptual {
+    rankdir=TB  dpi=300
+    fontname="Segoe UI"  fontsize=10
+    node [fontname="Segoe UI", fontsize=10, shape=box, style="rounded,filled", penwidth=2.2, margin="0.3,0.15"]
+    edge [fontname="Segoe UI", fontsize=8, arrowsize=0.8, penwidth=1.2, color="#78909c"]
+    graph [bgcolor="#fafbfc", pad=1.5, nodesep=0.7, ranksep=1.0]
+    newrank=true  splines=ortho
+
+    // ====== ENTIDADES ======
+    // Autenticacion
+    USUARIO [color="#1565c0", fillcolor="#e3f2fd", fontcolor="#1565c0", shape=rectangle]
+
+    // Personas
+    ESTUDIANTE [color="#2e7d32", fillcolor="#e8f5e9", fontcolor="#2e7d32"]
+    DOCENTE    [color="#2e7d32", fillcolor="#e8f5e9", fontcolor="#2e7d32"]
+    PADRE      [color="#2e7d32", fillcolor="#e8f5e9", fontcolor="#2e7d32"]
+
+    // Estructura academica
+    NIVEL_GRADO   [color="#e65100", fillcolor="#fff3e0", fontcolor="#e65100"]
+    ASIGNATURA    [color="#e65100", fillcolor="#fff3e0", fontcolor="#e65100"]
+    AULA          [color="#e65100", fillcolor="#fff3e0", fontcolor="#e65100"]
+    CURSO         [color="#e65100", fillcolor="#fff3e0", fontcolor="#e65100"]
+    SECCION_CURSO [color="#e65100", fillcolor="#fff3e0", fontcolor="#e65100"]
+
+    // Registros
+    NOTA       [color="#c2185b", fillcolor="#fce4ec", fontcolor="#c2185b"]
+    ASISTENCIA [color="#c2185b", fillcolor="#fce4ec", fontcolor="#c2185b"]
+    EVALUACION [color="#c2185b", fillcolor="#fce4ec", fontcolor="#c2185b"]
+    EVENTO     [color="#c2185b", fillcolor="#fce4ec", fontcolor="#c2185b"]
+
+    // Operaciones
+    JUSTIFICACION [color="#00695c", fillcolor="#e0f2f1", fontcolor="#00695c"]
+
+    // Comunicacion
+    NOTIFICACION [color="#7b1fa2", fillcolor="#ede7f6", fontcolor="#7b1fa2"]
+
+    // NUEVA: Semaforo KPI - Dashboard de indicadores
+    SEMAFORO_KPI [color="#bf360c", fillcolor="#fbe9e7", fontcolor="#bf360c", shape=box, penwidth=2.8]
+
+    // ====== CAPAS ======
+    { rank=source; NIVEL_GRADO ASIGNATURA AULA CURSO SECCION_CURSO }
+    { rank=sink; NOTA ASISTENCIA EVALUACION EVENTO NOTIFICACION SEMAFORO_KPI }
+
+    // ====== RELACIONES ======
+    // Usuario -> Perfiles
+    USUARIO -> ESTUDIANTE [xlabel="1:1", color="#1565c0", style=bold]
+    USUARIO -> DOCENTE    [xlabel="1:1", color="#1565c0", style=bold]
+    USUARIO -> PADRE      [xlabel="1:1", color="#1565c0", style=bold]
+
+    // Estructura academica
+    NIVEL_GRADO -> AULA       [xlabel="1:N"]
+    NIVEL_GRADO -> ASIGNATURA [xlabel="1:N", constraint=false]
+    AULA -> SECCION_CURSO     [xlabel="1:N"]
+    ASIGNATURA -> SECCION_CURSO [xlabel="1:N"]
+    AULA -> CURSO             [xlabel="1:N", constraint=false]
+
+    // Personas
+    PADRE -> ESTUDIANTE [xlabel="1:N", color="#43a047", style=dashed]
+
+    // Docente
+    DOCENTE -> CURSO          [xlabel="1:N"]
+    DOCENTE -> AULA           [xlabel="1:N", constraint=false]
+    DOCENTE -> SECCION_CURSO  [xlabel="1:N", constraint=false]
+
+    // Estudiante
+    ESTUDIANTE -> NOTA         [xlabel="1:N"]
+    ESTUDIANTE -> ASISTENCIA   [xlabel="1:N"]
+    ESTUDIANTE -> JUSTIFICACION [xlabel="1:N"]
+    ESTUDIANTE -> SEMAFORO_KPI [xlabel="1:1", color="#bf360c", style=bold, constraint=false]
+
+    // Docente -> Registros
+    DOCENTE -> NOTA       [xlabel="1:N", constraint=false]
+    DOCENTE -> ASISTENCIA [xlabel="1:N", constraint=false]
+    DOCENTE -> EVALUACION [xlabel="1:N"]
+
+    // Curso -> Registros
+    CURSO -> NOTA       [xlabel="1:N", constraint=false]
+    CURSO -> ASISTENCIA [xlabel="1:N", constraint=false]
+    CURSO -> EVALUACION [xlabel="1:N", constraint=false]
+
+    // Padre -> Justificacion
+    PADRE -> JUSTIFICACION [xlabel="1:N", constraint=false]
+
+    // Usuario -> Evento, Notificacion
+    USUARIO -> EVENTO       [xlabel="1:N", constraint=false]
+    USUARIO -> NOTIFICACION [xlabel="1:N", constraint=false]
+
+    // ====== SEMAFORO KPI: Relaciones con entidades monitoreadas ======
+    // Monitorea KPIs de registros academicos
+    NOTA -> SEMAFORO_KPI       [xlabel="alimenta", color="#bf360c", style=dashed, constraint=false]
+    ASISTENCIA -> SEMAFORO_KPI [xlabel="alimenta", color="#bf360c", style=dashed, constraint=false]
+    EVALUACION -> SEMAFORO_KPI [xlabel="alimenta", color="#bf360c", style=dashed, constraint=false]
+    EVENTO -> SEMAFORO_KPI     [xlabel="alimenta", color="#bf360c", style=dashed, constraint=false]
+
+    // Monitorea cursos y secciones
+    CURSO -> SEMAFORO_KPI          [xlabel="monitorea", color="#bf360c", style=dashed, constraint=false]
+    SECCION_CURSO -> SEMAFORO_KPI  [xlabel="monitorea", color="#bf360c", style=dashed, constraint=false]
+
+    // Monitorea a nivel aula
+    AULA -> SEMAFORO_KPI [xlabel="monitorea", color="#bf360c", style=dashed, constraint=false]
+
+    // Usuario accede al dashboard
+    USUARIO -> SEMAFORO_KPI [xlabel="consulta", color="#bf360c", style=bold, constraint=false]
+
+    labelloc="t"
+    label="MODELO CONCEPTUAL DE DATOS\nIEP Continental Americano - Backend Java | 16 Entidades\nIncluye nueva entidad SEMAFORO KPI"
+    fontsize=22  fontname="Segoe UI Bold"  fontcolor="#1a237e"
+}
+'''
+
+with open(r'D:\projects\SanMartinDigital\sanmartin-newbackend\docs\modelo_conceptual.dot', 'w', encoding='utf-8') as f:
+    f.write(conceptual)
+
+subprocess.run([dot_path, '-Kdot', '-Tpng',
+    r'D:\projects\SanMartinDigital\sanmartin-newbackend\docs\modelo_conceptual.dot',
+    '-o', r'D:\projects\SanMartinDigital\sanmartin-newbackend\docs\modelo_conceptual_sanmartin.png',
+    '-Gdpi=300'], check=True)
+print('[OK] Modelo Conceptual regenerado con SEMAFORO KPI')

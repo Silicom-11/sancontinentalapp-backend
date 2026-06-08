@@ -1,0 +1,170 @@
+import subprocess
+
+dot_path = r"C:\Program Files\Graphviz\bin\dot.exe"
+
+procesos = r'''
+digraph ProcesosSistema {
+    rankdir=TB  dpi=300
+    fontname="Segoe UI"  fontsize=9
+    node [fontname="Segoe UI", fontsize=8, shape=box, style="rounded,filled", penwidth=1.8, margin="0.2,0.1"]
+    edge [fontname="Segoe UI", fontsize=7, arrowsize=0.7, penwidth=1.0, color="#546e7a"]
+    graph [bgcolor="#fafbfc", pad=1.2, nodesep=0.5, ranksep=0.6]
+    newrank=true  splines=polyline
+
+    // Colores por rol
+    admin_color="#1565c0"  admin_fill="#e3f2fd"  admin_font="#1565c0"
+    teacher_color="#2e7d32"  teacher_fill="#e8f5e9"  teacher_font="#2e7d32"
+    parent_color="#e65100"  parent_fill="#fff3e0"  parent_font="#e65100"
+    student_color="#7b1fa2"  student_fill="#f3e5f5"  student_font="#7b1fa2"
+    system_color="#c2185b"  system_fill="#fce4ec"  system_font="#c2185b"
+    kpi_color="#bf360c"  kpi_fill="#fbe9e7"  kpi_font="#bf360c"
+
+    start_color="#4caf50"  start_fill="#e8f5e9"
+    end_color="#f44336"  end_fill="#ffebee"
+    decision_color="#ff9800"  decision_fill="#fff3e0"
+
+    // ====== PROCESO 1: AUTENTICACION Y REGISTRO ======
+    subgraph cluster_auth {
+        label="1. AUTENTICACION Y REGISTRO DE USUARIO"  fontsize=12  fontname="Segoe UI Bold"  fontcolor="#1565c0"
+        style="dashed"  color="#90caf9"  bgcolor="#f5f8ff"  penwidth=1.5
+
+        P1_start [label="INICIO\nUsuario abre app", shape=circle, style=filled, fillcolor="#e8f5e9", color="#4caf50", penwidth=2.5]
+        P1_choice [label="Tiene\ncuenta?", shape=diamond, fillcolor="#fff3e0", color="#ff9800", penwidth=2]
+        P1_login [label="Login\n(email + password)", fillcolor="#e3f2fd", color="#1565c0"]
+        P1_register [label="Registro\n(datos personales)", fillcolor="#e3f2fd", color="#1565c0"]
+        P1_verify [label="Verificar\nemail/dni", fillcolor="#e3f2fd", color="#1565c0"]
+        P1_jwt [label="Generar JWT\n+ Refresh Token", fillcolor="#fce4ec", color="#c2185b"]
+        P1_done [label="Sesion\nactiva", shape=box, style="rounded,filled", fillcolor="#e8f5e9", color="#4caf50"]
+
+        P1_start -> P1_choice
+        P1_choice -> P1_login [label="Si"]
+        P1_choice -> P1_register [label="No"]
+        P1_register -> P1_verify
+        P1_verify -> P1_jwt
+        P1_login -> P1_jwt
+        P1_jwt -> P1_done
+    }
+
+    // ====== PROCESO 2: MATRICULA ======
+    subgraph cluster_enroll {
+        label="2. MATRICULA DE ESTUDIANTE"  fontsize=12  fontname="Segoe UI Bold"  fontcolor="#e65100"
+        style="dashed"  color="#ffcc80"  bgcolor="#fffaf5"  penwidth=1.5
+
+        P2_start [label="Admin asigna\nEstudiante a Aula", shape=circle, style=filled, fillcolor="#e8f5e9", color="#4caf50", penwidth=2.5]
+        P2_check_cap [label="Aula tiene\ncapacidad?", shape=diamond, fillcolor="#fff3e0", color="#ff9800"]
+        P2_assign [label="Generar Matricula\n+ Codigo Estudiante", fillcolor="#fff3e0", color="#e65100"]
+        P2_notify [label="Notificar\nPadre + Estudiante", fillcolor="#f3e5f5", color="#7b1fa2"]
+        P2_done [label="Matricula\ncompletada", shape=box, style="rounded,filled", fillcolor="#e8f5e9", color="#4caf50"]
+
+        P2_start -> P2_check_cap
+        P2_check_cap -> P2_assign [label="Si"]
+        P2_check_cap -> P2_start [label="No\n(otra seccion)"]
+        P2_assign -> P2_notify
+        P2_notify -> P2_done
+    }
+
+    // ====== PROCESO 3: ASISTENCIA ======
+    subgraph cluster_att {
+        label="3. REGISTRO DE ASISTENCIA"  fontsize=12  fontname="Segoe UI Bold"  fontcolor="#2e7d32"
+        style="dashed"  color="#a5d6a7"  bgcolor="#f5faf5"  penwidth=1.5
+
+        P3_start [label="Docente inicia\nsesion de clase", shape=circle, style=filled, fillcolor="#e8f5e9", color="#4caf50", penwidth=2.5]
+        P3_list [label="Cargar lista\nde estudiantes", fillcolor="#e8f5e9", color="#2e7d32"]
+        P3_mark [label="Marcar\nPresente/Tarde/Ausente", fillcolor="#e8f5e9", color="#2e7d32"]
+        P3_save [label="Guardar\nasistencias (bulk)", fillcolor="#fce4ec", color="#c2185b"]
+        P3_notif [label="Notificar a\nPadres (ausentes)", fillcolor="#f3e5f5", color="#7b1fa2"]
+        P3_done [label="Asistencia\nregistrada", shape=box, style="rounded,filled", fillcolor="#e8f5e9", color="#4caf50"]
+
+        P3_start -> P3_list -> P3_mark -> P3_save -> P3_notif -> P3_done
+    }
+
+    // ====== PROCESO 4: CALIFICACIONES ======
+    subgraph cluster_grades {
+        label="4. REGISTRO DE CALIFICACIONES"  fontsize=12  fontname="Segoe UI Bold"  fontcolor="#c2185b"
+        style="dashed"  color="#f48fb1"  bgcolor="#fdf5f8"  penwidth=1.5
+
+        P4_start [label="Docente crea\nEvaluacion", shape=circle, style=filled, fillcolor="#e8f5e9", color="#4caf50", penwidth=2.5]
+        P4_eval [label="Definir tipo de\nevaluacion + peso", fillcolor="#fce4ec", color="#c2185b"]
+        P4_score [label="Registrar\nnotas por alumno", fillcolor="#fce4ec", color="#c2185b"]
+        P4_calc [label="Calcular promedio\n(calculateAverage)", fillcolor="#fce4ec", color="#c2185b"]
+        P4_close [label="Cerrar bimestre?\n(status = cerrado)", shape=diamond, fillcolor="#fff3e0", color="#ff9800"]
+        P4_publish [label="Publicar notas\n(status = publicado)", fillcolor="#fce4ec", color="#c2185b"]
+        P4_notif [label="Notificar\nEstudiantes + Padres", fillcolor="#f3e5f5", color="#7b1fa2"]
+        P4_done [label="Notas\npublicadas", shape=box, style="rounded,filled", fillcolor="#e8f5e9", color="#4caf50"]
+
+        P4_start -> P4_eval -> P4_score -> P4_calc -> P4_close
+        P4_close -> P4_publish [label="Si"]
+        P4_close -> P4_eval [label="No\n(seguir registrando)"]
+        P4_publish -> P4_notif -> P4_done
+    }
+
+    // ====== PROCESO 5: JUSTIFICACIONES ======
+    subgraph cluster_justif {
+        label="5. JUSTIFICACION DE INASISTENCIAS"  fontsize=12  fontname="Segoe UI Bold"  fontcolor="#00695c"
+        style="dashed"  color="#80cbc4"  bgcolor="#f5fcfa"  penwidth=1.5
+
+        P5_start [label="Padre solicita\njustificacion", shape=circle, style=filled, fillcolor="#e8f5e9", color="#4caf50", penwidth=2.5]
+        P5_form [label="Completar\nmotivo + documentos", fillcolor="#fff3e0", color="#e65100"]
+        P5_submit [label="Enviar solicitud\n(status = pending)", fillcolor="#e0f2f1", color="#00695c"]
+        P5_review [label="Admin/Docente\nrevisa solicitud", shape=diamond, fillcolor="#fff3e0", color="#ff9800"]
+        P5_approve [label="Aprobar\n(status = approved)", fillcolor="#e8f5e9", color="#4caf50"]
+        P5_reject [label="Rechazar\n(status = rejected)", fillcolor="#ffebee", color="#f44336"]
+        P5_update_att [label="Actualizar\nAsistencia a Justificado", fillcolor="#fce4ec", color="#c2185b"]
+        P5_notif [label="Notificar\nPadre del resultado", fillcolor="#f3e5f5", color="#7b1fa2"]
+        P5_done [label="Justificacion\nprocesada", shape=box, style="rounded,filled", fillcolor="#e8f5e9", color="#4caf50"]
+
+        P5_start -> P5_form -> P5_submit -> P5_review
+        P5_review -> P5_approve [label="Aprueba"]
+        P5_review -> P5_reject [label="Rechaza"]
+        P5_approve -> P5_update_att -> P5_notif -> P5_done
+        P5_reject -> P5_notif -> P5_done
+    }
+
+    // ====== PROCESO 6: SEMAFORO KPI ======
+    subgraph cluster_kpi {
+        label="6. SEMAFORO KPI - DASHBOARD DE INDICADORES"  fontsize=12  fontname="Segoe UI Bold"  fontcolor="#bf360c"
+        style="dashed"  color="#ffab91"  bgcolor="#fef6f4"  penwidth=1.5
+
+        P6_start [label="Trigger: Nueva\nnota, asistencia o\nevaluacion", shape=circle, style=filled, fillcolor="#e8f5e9", color="#4caf50", penwidth=2.5]
+        P6_gather [label="Recolectar datos\nNotas + Asistencias\n+ Evaluaciones", fillcolor="#fbe9e7", color="#bf360c"]
+        P6_calc_avg [label="Calcular\npromedioNotas\ntasaAsistencia\ntasaAprobacion", fillcolor="#fbe9e7", color="#bf360c"]
+        P6_color [label="Determinar\ncolorSemaforo", shape=diamond, fillcolor="#fff3e0", color="#ff9800"]
+        P6_green [label="VERDE\n(Todo OK)", fillcolor="#e8f5e9", color="#4caf50"]
+        P6_yellow [label="AMARILLO\n(Alerta moderada)", fillcolor="#fff8e1", color="#f9a825"]
+        P6_red [label="ROJO\n(Critico)", fillcolor="#ffebee", color="#f44336"]
+        P6_alerts [label="Generar alertas\nsi hay criticos", fillcolor="#fbe9e7", color="#bf360c"]
+        P6_save [label="Guardar KPI\n+ ultimaActualiz", fillcolor="#fbe9e7", color="#bf360c"]
+        P6_notif [label="Notificar a\nPadres/Docentes\n(si hay alerta roja)", fillcolor="#f3e5f5", color="#7b1fa2"]
+        P6_done [label="Dashboard KPI\nactualizado", shape=box, style="rounded,filled", fillcolor="#e8f5e9", color="#4caf50"]
+
+        P6_start -> P6_gather -> P6_calc_avg -> P6_color
+        P6_color -> P6_green [label=">= 14"]
+        P6_color -> P6_yellow [label="11-13"]
+        P6_color -> P6_red [label="< 11"]
+        P6_green -> P6_save
+        P6_yellow -> P6_alerts
+        P6_red -> P6_alerts
+        P6_alerts -> P6_save -> P6_notif -> P6_done
+    }
+
+    // ====== CONEXIONES ENTRE PROCESOS ======
+    P1_done -> P2_start [style=dashed, color="#78909c", penwidth=0.8]
+    P2_done -> P3_start [style=dashed, color="#78909c", penwidth=0.8]
+    P3_done -> P6_start [style=dashed, color="#bf360c", penwidth=0.8]
+    P4_done -> P6_start [style=dashed, color="#bf360c", penwidth=0.8]
+    P5_done -> P6_start [style=dashed, color="#bf360c", penwidth=0.8]
+
+    labelloc="t"
+    label="DIAGRAMA DE PROCESOS DEL SISTEMA\nIEP Continental Americano - Backend Java | 6 Procesos Principales | Flujo BPMN Simplificado\nSwimlanes por color: Azul=Admin, Verde=Docente, Naranja=Padre, Violeta=Estudiante, Rojo=Sistema, Marron=KPI"
+    fontsize=18  fontname="Segoe UI Bold"  fontcolor="#1a237e"
+}
+'''
+
+with open(r'D:\projects\SanMartinDigital\sanmartin-newbackend\docs\diagrama_procesos.dot', 'w', encoding='utf-8') as f:
+    f.write(procesos)
+
+subprocess.run([dot_path, '-Kdot', '-Tpng',
+    r'D:\projects\SanMartinDigital\sanmartin-newbackend\docs\diagrama_procesos.dot',
+    '-o', r'D:\projects\SanMartinDigital\sanmartin-newbackend\docs\diagrama_procesos_sanmartin.png',
+    '-Gdpi=300'], check=True)
+print('[OK] Diagrama de Procesos')

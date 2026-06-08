@@ -1,0 +1,23 @@
+# Build outputs
+target/
+
+# Local/runtime artifacts
+logs/
+*.log
+backend-*.log
+backend-*.out.log
+backend-*.err.log
+
+# Local environments and IDE state
+.venv/
+.vscode/
+.idea/
+
+# Secrets and local configuration
+*.env
+.env
+application-*.local.properties
+
+# Legacy local helper with machine-specific values
+write_props.py
+seed_newbackend.js

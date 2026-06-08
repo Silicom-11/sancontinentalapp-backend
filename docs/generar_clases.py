@@ -1,0 +1,301 @@
+import subprocess
+
+dot_path = r"C:\Program Files\Graphviz\bin\dot.exe"
+
+SEP = '<TR><TD COLSPAN="2" BGCOLOR="#e0e0e0" HEIGHT="1"></TD></TR>'  # separator between attrs and methods
+
+clases = f'''
+digraph DiagramaClases {{
+    rankdir=TB  dpi=300
+    fontname="Segoe UI"  fontsize=9
+    node [fontname="Segoe UI", fontsize=8, shape=plaintext, margin=0]
+    edge [fontname="Segoe UI", fontsize=7, arrowsize=0.7, penwidth=1.0, color="#78909c"]
+    graph [bgcolor="#fafbfc", pad=1.2, nodesep=0.4, ranksep=0.7]
+    newrank=true  splines=polyline
+
+    subgraph cluster_auth {{
+        label="AUTENTICACION"  fontsize=13  fontname="Segoe UI Bold"  fontcolor="#1565c0"
+        style="dashed"  color="#90caf9"  bgcolor="#e3f2fd"  penwidth=1.5
+        User [label=<
+            <TABLE BORDER="2" CELLBORDER="0" CELLSPACING="0" CELLPADDING="3" BGCOLOR="white" COLOR="#1565c0">
+            <TR><TD COLSPAN="2" BGCOLOR="#bbdefb"><FONT COLOR="#1565c0" POINT-SIZE="10"><B>User</B></FONT></TD></TR>
+            <TR><TD ALIGN="LEFT">- id: String</TD><TD ALIGN="RIGHT"><FONT POINT-SIZE="7" COLOR="#c62828">PK</FONT></TD></TR>
+            <TR><TD ALIGN="LEFT">- firstName: String</TD><TD></TD></TR>
+            <TR><TD ALIGN="LEFT">- lastName: String</TD><TD></TD></TR>
+            <TR><TD ALIGN="LEFT">- email: String</TD><TD ALIGN="RIGHT"><FONT POINT-SIZE="7" COLOR="#2e7d32">UK</FONT></TD></TR>
+            <TR><TD ALIGN="LEFT">- dni: String</TD><TD ALIGN="RIGHT"><FONT POINT-SIZE="7" COLOR="#2e7d32">UK</FONT></TD></TR>
+            <TR><TD ALIGN="LEFT">- password: String</TD><TD></TD></TR>
+            <TR><TD ALIGN="LEFT">- role: String</TD><TD></TD></TR>
+            <TR><TD ALIGN="LEFT">- loginAttempts: int</TD><TD></TD></TR>
+            {SEP}
+            <TR><TD COLSPAN="2" ALIGN="LEFT"><FONT COLOR="#555">+ getFullName(): String</FONT></TD></TR>
+            <TR><TD COLSPAN="2" ALIGN="LEFT"><FONT COLOR="#555">+ isLocked(): boolean</FONT></TD></TR>
+            </TABLE>
+        >]
+    }}
+
+    subgraph cluster_people {{
+        label="PERSONAS"  fontsize=13  fontname="Segoe UI Bold"  fontcolor="#2e7d32"
+        style="dashed"  color="#a5d6a7"  bgcolor="#e8f5e9"  penwidth=1.5
+        Student [label=<
+            <TABLE BORDER="2" CELLBORDER="0" CELLSPACING="0" CELLPADDING="3" BGCOLOR="white" COLOR="#2e7d32">
+            <TR><TD COLSPAN="2" BGCOLOR="#c8e6c9"><FONT COLOR="#2e7d32" POINT-SIZE="10"><B>Student</B></FONT></TD></TR>
+            <TR><TD ALIGN="LEFT">- id: String</TD><TD ALIGN="RIGHT"><FONT POINT-SIZE="7" COLOR="#c62828">PK</FONT></TD></TR>
+            <TR><TD ALIGN="LEFT">- firstName: String</TD><TD></TD></TR>
+            <TR><TD ALIGN="LEFT">- lastName: String</TD><TD></TD></TR>
+            <TR><TD ALIGN="LEFT">- dni: String</TD><TD ALIGN="RIGHT"><FONT POINT-SIZE="7" COLOR="#2e7d32">UK</FONT></TD></TR>
+            <TR><TD ALIGN="LEFT">- gradeLevel: String</TD><TD></TD></TR>
+            <TR><TD ALIGN="LEFT">- studentCode: String</TD><TD></TD></TR>
+            <TR><TD ALIGN="LEFT">- guardians: List</TD><TD></TD></TR>
+            <TR><TD ALIGN="LEFT">- medicalInfo: MedicalInfo</TD><TD></TD></TR>
+            {SEP}
+            <TR><TD COLSPAN="2" ALIGN="LEFT"><FONT COLOR="#555">+ getFullName(): String</FONT></TD></TR>
+            </TABLE>
+        >]
+        Teacher [label=<
+            <TABLE BORDER="2" CELLBORDER="0" CELLSPACING="0" CELLPADDING="3" BGCOLOR="white" COLOR="#2e7d32">
+            <TR><TD COLSPAN="2" BGCOLOR="#c8e6c9"><FONT COLOR="#2e7d32" POINT-SIZE="10"><B>Teacher</B></FONT></TD></TR>
+            <TR><TD ALIGN="LEFT">- id: String</TD><TD ALIGN="RIGHT"><FONT POINT-SIZE="7" COLOR="#c62828">PK</FONT></TD></TR>
+            <TR><TD ALIGN="LEFT">- firstName: String</TD><TD></TD></TR>
+            <TR><TD ALIGN="LEFT">- dni: String</TD><TD ALIGN="RIGHT"><FONT POINT-SIZE="7" COLOR="#2e7d32">UK</FONT></TD></TR>
+            <TR><TD ALIGN="LEFT">- employeeCode: String</TD><TD></TD></TR>
+            <TR><TD ALIGN="LEFT">- specialty: String</TD><TD></TD></TR>
+            <TR><TD ALIGN="LEFT">- certifications: List</TD><TD></TD></TR>
+            <TR><TD ALIGN="LEFT">- contractType: String</TD><TD></TD></TR>
+            <TR><TD ALIGN="LEFT">- salary: Double</TD><TD></TD></TR>
+            <TR><TD ALIGN="LEFT">- bankAccount: BankAccount</TD><TD></TD></TR>
+            {SEP}
+            <TR><TD COLSPAN="2" ALIGN="LEFT"><FONT COLOR="#555">+ getFullName(): String</FONT></TD></TR>
+            </TABLE>
+        >]
+        Parent [label=<
+            <TABLE BORDER="2" CELLBORDER="0" CELLSPACING="0" CELLPADDING="3" BGCOLOR="white" COLOR="#2e7d32">
+            <TR><TD COLSPAN="2" BGCOLOR="#c8e6c9"><FONT COLOR="#2e7d32" POINT-SIZE="10"><B>Parent</B></FONT></TD></TR>
+            <TR><TD ALIGN="LEFT">- id: String</TD><TD ALIGN="RIGHT"><FONT POINT-SIZE="7" COLOR="#c62828">PK</FONT></TD></TR>
+            <TR><TD ALIGN="LEFT">- firstName: String</TD><TD></TD></TR>
+            <TR><TD ALIGN="LEFT">- dni: String</TD><TD ALIGN="RIGHT"><FONT POINT-SIZE="7" COLOR="#2e7d32">UK</FONT></TD></TR>
+            <TR><TD ALIGN="LEFT">- phone: String</TD><TD></TD></TR>
+            <TR><TD ALIGN="LEFT">- occupation: String</TD><TD></TD></TR>
+            <TR><TD ALIGN="LEFT">- children: List</TD><TD></TD></TR>
+            <TR><TD ALIGN="LEFT">- notifications: NotifPrefs</TD><TD></TD></TR>
+            <TR><TD ALIGN="LEFT">- pushTokens: List</TD><TD></TD></TR>
+            {SEP}
+            <TR><TD COLSPAN="2" ALIGN="LEFT"><FONT COLOR="#555">+ getChildrenCount(): int</FONT></TD></TR>
+            </TABLE>
+        >]
+    }}
+
+    subgraph cluster_academic {{
+        label="ACADEMICO"  fontsize=13  fontname="Segoe UI Bold"  fontcolor="#e65100"
+        style="dashed"  color="#ffcc80"  bgcolor="#fff3e0"  penwidth=1.5
+        GradeLevel [label=<
+            <TABLE BORDER="2" CELLBORDER="0" CELLSPACING="0" CELLPADDING="3" BGCOLOR="white" COLOR="#e65100">
+            <TR><TD COLSPAN="2" BGCOLOR="#ffe0b2"><FONT COLOR="#e65100" POINT-SIZE="10"><B>GradeLevel</B></FONT></TD></TR>
+            <TR><TD ALIGN="LEFT">- id: String</TD><TD ALIGN="RIGHT"><FONT POINT-SIZE="7" COLOR="#c62828">PK</FONT></TD></TR>
+            <TR><TD ALIGN="LEFT">- name: String</TD><TD></TD></TR>
+            <TR><TD ALIGN="LEFT">- level: int</TD><TD></TD></TR>
+            <TR><TD ALIGN="LEFT">- type: String</TD><TD></TD></TR>
+            <TR><TD ALIGN="LEFT">- order: int</TD><TD></TD></TR>
+            {SEP}
+            <TR><TD COLSPAN="2" ALIGN="LEFT"><FONT COLOR="#555">+ getFullName(): String</FONT></TD></TR>
+            </TABLE>
+        >]
+        Subject [label=<
+            <TABLE BORDER="2" CELLBORDER="0" CELLSPACING="0" CELLPADDING="3" BGCOLOR="white" COLOR="#e65100">
+            <TR><TD COLSPAN="2" BGCOLOR="#ffe0b2"><FONT COLOR="#e65100" POINT-SIZE="10"><B>Subject</B></FONT></TD></TR>
+            <TR><TD ALIGN="LEFT">- id: String</TD><TD ALIGN="RIGHT"><FONT POINT-SIZE="7" COLOR="#c62828">PK</FONT></TD></TR>
+            <TR><TD ALIGN="LEFT">- name: String</TD><TD></TD></TR>
+            <TR><TD ALIGN="LEFT">- code: String</TD><TD ALIGN="RIGHT"><FONT POINT-SIZE="7" COLOR="#2e7d32">UK</FONT></TD></TR>
+            <TR><TD ALIGN="LEFT">- area: String</TD><TD></TD></TR>
+            <TR><TD ALIGN="LEFT">- hoursPerWeek: int</TD><TD></TD></TR>
+            <TR><TD ALIGN="LEFT">- competencies: List</TD><TD></TD></TR>
+            <TR><TD ALIGN="LEFT">- defaultWeights: EvalWeights</TD><TD></TD></TR>
+            </TABLE>
+        >]
+        Classroom [label=<
+            <TABLE BORDER="2" CELLBORDER="0" CELLSPACING="0" CELLPADDING="3" BGCOLOR="white" COLOR="#e65100">
+            <TR><TD COLSPAN="2" BGCOLOR="#ffe0b2"><FONT COLOR="#e65100" POINT-SIZE="10"><B>Classroom</B></FONT></TD></TR>
+            <TR><TD ALIGN="LEFT">- id: String</TD><TD ALIGN="RIGHT"><FONT POINT-SIZE="7" COLOR="#c62828">PK</FONT></TD></TR>
+            <TR><TD ALIGN="LEFT">- section: String</TD><TD></TD></TR>
+            <TR><TD ALIGN="LEFT">- shift: String</TD><TD></TD></TR>
+            <TR><TD ALIGN="LEFT">- capacity: int</TD><TD></TD></TR>
+            <TR><TD ALIGN="LEFT">- location: ClassLoc</TD><TD></TD></TR>
+            <TR><TD ALIGN="LEFT">- stats: ClassStats</TD><TD></TD></TR>
+            {SEP}
+            <TR><TD COLSPAN="2" ALIGN="LEFT"><FONT COLOR="#555">+ getAvailableSpots(): int</FONT></TD></TR>
+            </TABLE>
+        >]
+        Course [label=<
+            <TABLE BORDER="2" CELLBORDER="0" CELLSPACING="0" CELLPADDING="3" BGCOLOR="white" COLOR="#e65100">
+            <TR><TD COLSPAN="2" BGCOLOR="#ffe0b2"><FONT COLOR="#e65100" POINT-SIZE="10"><B>Course</B></FONT></TD></TR>
+            <TR><TD ALIGN="LEFT">- id: String</TD><TD ALIGN="RIGHT"><FONT POINT-SIZE="7" COLOR="#c62828">PK</FONT></TD></TR>
+            <TR><TD ALIGN="LEFT">- name: String</TD><TD></TD></TR>
+            <TR><TD ALIGN="LEFT">- code: String</TD><TD ALIGN="RIGHT"><FONT POINT-SIZE="7" COLOR="#2e7d32">UK</FONT></TD></TR>
+            <TR><TD ALIGN="LEFT">- gradeLevel: String</TD><TD></TD></TR>
+            <TR><TD ALIGN="LEFT">- students: List</TD><TD></TD></TR>
+            <TR><TD ALIGN="LEFT">- schedule: List</TD><TD></TD></TR>
+            <TR><TD ALIGN="LEFT">- evaluationWeights: EvalWeights</TD><TD></TD></TR>
+            {SEP}
+            <TR><TD COLSPAN="2" ALIGN="LEFT"><FONT COLOR="#555">+ getStudentCount(): int</FONT></TD></TR>
+            </TABLE>
+        >]
+        CourseSection [label=<
+            <TABLE BORDER="2" CELLBORDER="0" CELLSPACING="0" CELLPADDING="3" BGCOLOR="white" COLOR="#e65100">
+            <TR><TD COLSPAN="2" BGCOLOR="#ffe0b2"><FONT COLOR="#e65100" POINT-SIZE="10"><B>CourseSection</B></FONT></TD></TR>
+            <TR><TD ALIGN="LEFT">- id: String</TD><TD ALIGN="RIGHT"><FONT POINT-SIZE="7" COLOR="#c62828">PK</FONT></TD></TR>
+            <TR><TD ALIGN="LEFT">- schedule: List</TD><TD></TD></TR>
+            <TR><TD ALIGN="LEFT">- resources: List</TD><TD></TD></TR>
+            <TR><TD ALIGN="LEFT">- periodEvaluations: List</TD><TD></TD></TR>
+            <TR><TD ALIGN="LEFT">- stats: SectionStats</TD><TD></TD></TR>
+            </TABLE>
+        >]
+    }}
+
+    subgraph cluster_records {{
+        label="REGISTROS"  fontsize=13  fontname="Segoe UI Bold"  fontcolor="#c2185b"
+        style="dashed"  color="#f48fb1"  bgcolor="#fce4ec"  penwidth=1.5
+        Grade [label=<
+            <TABLE BORDER="2" CELLBORDER="0" CELLSPACING="0" CELLPADDING="3" BGCOLOR="white" COLOR="#c2185b">
+            <TR><TD COLSPAN="2" BGCOLOR="#f8bbd9"><FONT COLOR="#c2185b" POINT-SIZE="10"><B>Grade</B></FONT></TD></TR>
+            <TR><TD ALIGN="LEFT">- id: String</TD><TD ALIGN="RIGHT"><FONT POINT-SIZE="7" COLOR="#c62828">PK</FONT></TD></TR>
+            <TR><TD ALIGN="LEFT">- bimester: int</TD><TD></TD></TR>
+            <TR><TD ALIGN="LEFT">- academicYear: int</TD><TD></TD></TR>
+            <TR><TD ALIGN="LEFT">- scores: List</TD><TD></TD></TR>
+            <TR><TD ALIGN="LEFT">- average: Double</TD><TD></TD></TR>
+            <TR><TD ALIGN="LEFT">- status: String</TD><TD></TD></TR>
+            {SEP}
+            <TR><TD COLSPAN="2" ALIGN="LEFT"><FONT COLOR="#555">+ calculateAverage(): void</FONT></TD></TR>
+            </TABLE>
+        >]
+        Attendance [label=<
+            <TABLE BORDER="2" CELLBORDER="0" CELLSPACING="0" CELLPADDING="3" BGCOLOR="white" COLOR="#c2185b">
+            <TR><TD COLSPAN="2" BGCOLOR="#f8bbd9"><FONT COLOR="#c2185b" POINT-SIZE="10"><B>Attendance</B></FONT></TD></TR>
+            <TR><TD ALIGN="LEFT">- id: String</TD><TD ALIGN="RIGHT"><FONT POINT-SIZE="7" COLOR="#c62828">PK</FONT></TD></TR>
+            <TR><TD ALIGN="LEFT">- date: Instant</TD><TD></TD></TR>
+            <TR><TD ALIGN="LEFT">- status: String</TD><TD></TD></TR>
+            <TR><TD ALIGN="LEFT">- arrivalTime: String</TD><TD></TD></TR>
+            <TR><TD ALIGN="LEFT">- observations: String</TD><TD></TD></TR>
+            </TABLE>
+        >]
+        Evaluation [label=<
+            <TABLE BORDER="2" CELLBORDER="0" CELLSPACING="0" CELLPADDING="3" BGCOLOR="white" COLOR="#c2185b">
+            <TR><TD COLSPAN="2" BGCOLOR="#f8bbd9"><FONT COLOR="#c2185b" POINT-SIZE="10"><B>Evaluation</B></FONT></TD></TR>
+            <TR><TD ALIGN="LEFT">- id: String</TD><TD ALIGN="RIGHT"><FONT POINT-SIZE="7" COLOR="#c62828">PK</FONT></TD></TR>
+            <TR><TD ALIGN="LEFT">- name: String</TD><TD></TD></TR>
+            <TR><TD ALIGN="LEFT">- type: String</TD><TD></TD></TR>
+            <TR><TD ALIGN="LEFT">- bimester: int</TD><TD></TD></TR>
+            <TR><TD ALIGN="LEFT">- maxGrade: Double</TD><TD></TD></TR>
+            <TR><TD ALIGN="LEFT">- weight: Double</TD><TD></TD></TR>
+            </TABLE>
+        >]
+        Event [label=<
+            <TABLE BORDER="2" CELLBORDER="0" CELLSPACING="0" CELLPADDING="3" BGCOLOR="white" COLOR="#c2185b">
+            <TR><TD COLSPAN="2" BGCOLOR="#f8bbd9"><FONT COLOR="#c2185b" POINT-SIZE="10"><B>Event</B></FONT></TD></TR>
+            <TR><TD ALIGN="LEFT">- id: String</TD><TD ALIGN="RIGHT"><FONT POINT-SIZE="7" COLOR="#c62828">PK</FONT></TD></TR>
+            <TR><TD ALIGN="LEFT">- title: String</TD><TD></TD></TR>
+            <TR><TD ALIGN="LEFT">- date: String</TD><TD></TD></TR>
+            <TR><TD ALIGN="LEFT">- type: String</TD><TD></TD></TR>
+            <TR><TD ALIGN="LEFT">- location: String</TD><TD></TD></TR>
+            <TR><TD ALIGN="LEFT">- notifyStudents: Boolean</TD><TD></TD></TR>
+            <TR><TD ALIGN="LEFT">- notifyParents: Boolean</TD><TD></TD></TR>
+            </TABLE>
+        >]
+    }}
+
+    subgraph cluster_ops {{
+        label="OPERACIONES"  fontsize=13  fontname="Segoe UI Bold"  fontcolor="#00695c"
+        style="dashed"  color="#80cbc4"  bgcolor="#e0f2f1"  penwidth=1.5
+        Justification [label=<
+            <TABLE BORDER="2" CELLBORDER="0" CELLSPACING="0" CELLPADDING="3" BGCOLOR="white" COLOR="#00695c">
+            <TR><TD COLSPAN="2" BGCOLOR="#b2dfdb"><FONT COLOR="#00695c" POINT-SIZE="10"><B>Justification</B></FONT></TD></TR>
+            <TR><TD ALIGN="LEFT">- id: String</TD><TD ALIGN="RIGHT"><FONT POINT-SIZE="7" COLOR="#c62828">PK</FONT></TD></TR>
+            <TR><TD ALIGN="LEFT">- reason: String</TD><TD></TD></TR>
+            <TR><TD ALIGN="LEFT">- observations: String</TD><TD></TD></TR>
+            <TR><TD ALIGN="LEFT">- documents: List</TD><TD></TD></TR>
+            <TR><TD ALIGN="LEFT">- status: String</TD><TD></TD></TR>
+            <TR><TD ALIGN="LEFT">- reviewedBy: String</TD><TD></TD></TR>
+            <TR><TD ALIGN="LEFT">- reviewedAt: Instant</TD><TD></TD></TR>
+            </TABLE>
+        >]
+    }}
+
+    subgraph cluster_comm {{
+        label="COMUNICACION"  fontsize=13  fontname="Segoe UI Bold"  fontcolor="#7b1fa2"
+        style="dashed"  color="#ce93d8"  bgcolor="#f3e5f5"  penwidth=1.5
+        Notification [label=<
+            <TABLE BORDER="2" CELLBORDER="0" CELLSPACING="0" CELLPADDING="3" BGCOLOR="white" COLOR="#7b1fa2">
+            <TR><TD COLSPAN="2" BGCOLOR="#e1bee7"><FONT COLOR="#7b1fa2" POINT-SIZE="10"><B>Notification</B></FONT></TD></TR>
+            <TR><TD ALIGN="LEFT">- id: String</TD><TD ALIGN="RIGHT"><FONT POINT-SIZE="7" COLOR="#c62828">PK</FONT></TD></TR>
+            <TR><TD ALIGN="LEFT">- title: String</TD><TD></TD></TR>
+            <TR><TD ALIGN="LEFT">- message: String</TD><TD></TD></TR>
+            <TR><TD ALIGN="LEFT">- type: String</TD><TD></TD></TR>
+            <TR><TD ALIGN="LEFT">- data: NotifData</TD><TD></TD></TR>
+            <TR><TD ALIGN="LEFT">- isRead: Boolean</TD><TD></TD></TR>
+            <TR><TD ALIGN="LEFT">- expiresAt: Instant</TD><TD></TD></TR>
+            </TABLE>
+        >]
+    }}
+
+    subgraph cluster_kpi {{
+        label="DASHBOARD KPI"  fontsize=13  fontname="Segoe UI Bold"  fontcolor="#bf360c"
+        style="dashed"  color="#ffab91"  bgcolor="#fbe9e7"  penwidth=1.5
+        SemaforoKpi [label=<
+            <TABLE BORDER="2" CELLBORDER="0" CELLSPACING="0" CELLPADDING="3" BGCOLOR="white" COLOR="#bf360c">
+            <TR><TD COLSPAN="2" BGCOLOR="#ffccbc"><FONT COLOR="#bf360c" POINT-SIZE="10"><B>SemaforoKpi</B></FONT></TD></TR>
+            <TR><TD ALIGN="LEFT">- id: String</TD><TD ALIGN="RIGHT"><FONT POINT-SIZE="7" COLOR="#c62828">PK</FONT></TD></TR>
+            <TR><TD ALIGN="LEFT">- colorSemaforo: String</TD><TD></TD></TR>
+            <TR><TD ALIGN="LEFT">- promedioNotas: Double</TD><TD></TD></TR>
+            <TR><TD ALIGN="LEFT">- tasaAsistencia: Double</TD><TD></TD></TR>
+            <TR><TD ALIGN="LEFT">- tasaAprobacion: Double</TD><TD></TD></TR>
+            <TR><TD ALIGN="LEFT">- pendientesEval: int</TD><TD></TD></TR>
+            <TR><TD ALIGN="LEFT">- alertas: List</TD><TD></TD></TR>
+            {SEP}
+            <TR><TD COLSPAN="2" ALIGN="LEFT"><FONT COLOR="#555">+ calcularSemaforo(): String</FONT></TD></TR>
+            <TR><TD COLSPAN="2" ALIGN="LEFT"><FONT COLOR="#555">+ generarAlertas(): List</FONT></TD></TR>
+            </TABLE>
+        >]
+    }}
+
+    Student -> User [arrowhead="open", style=dashed, color="#1565c0"]
+    Teacher -> User [arrowhead="open", style=dashed, color="#1565c0"]
+    Parent -> User [arrowhead="open", style=dashed, color="#1565c0"]
+    Student -> SemaforoKpi [arrowhead="open", style=bold, color="#bf360c"]
+    Student -> Grade [arrowhead="open", color="#c2185b"]
+    Student -> Attendance [arrowhead="open", color="#c2185b"]
+    Student -> Justification [arrowhead="open", color="#00695c"]
+    Teacher -> Course [arrowhead="open", color="#e65100"]
+    Teacher -> CourseSection [arrowhead="diamond", color="#e65100"]
+    Teacher -> Grade [arrowhead="open", color="#c2185b"]
+    Teacher -> Attendance [arrowhead="open", color="#c2185b"]
+    Teacher -> Evaluation [arrowhead="open", color="#c2185b"]
+    GradeLevel -> Classroom [arrowhead="open", color="#e65100"]
+    GradeLevel -> Subject [arrowhead="open", color="#e65100"]
+    Subject -> CourseSection [arrowhead="open", color="#e65100"]
+    Classroom -> CourseSection [arrowhead="open", color="#e65100"]
+    Classroom -> Course [arrowhead="open", color="#e65100"]
+    Course -> Grade [arrowhead="open", color="#c2185b"]
+    Course -> Attendance [arrowhead="open", color="#c2185b"]
+    Course -> Evaluation [arrowhead="open", color="#c2185b"]
+    Parent -> Justification [arrowhead="open", color="#00695c"]
+    Grade -> SemaforoKpi [arrowhead="open", style=dashed, color="#bf360c"]
+    Attendance -> SemaforoKpi [arrowhead="open", style=dashed, color="#bf360c"]
+    Evaluation -> SemaforoKpi [arrowhead="open", style=dashed, color="#bf360c"]
+    Course -> SemaforoKpi [arrowhead="open", style=dashed, color="#bf360c"]
+    CourseSection -> SemaforoKpi [arrowhead="open", style=dashed, color="#bf360c"]
+    Classroom -> SemaforoKpi [arrowhead="open", style=dashed, color="#bf360c"]
+    User -> SemaforoKpi [arrowhead="open", style=bold, color="#bf360c"]
+
+    labelloc="t"
+    label="DIAGRAMA DE CLASES UML\\nIEP Continental Americano - Backend Java | 16 Clases organizadas por dominios"
+    fontsize=20  fontname="Segoe UI Bold"  fontcolor="#1a237e"
+}}
+'''
+
+with open(r'D:\projects\SanMartinDigital\sanmartin-newbackend\docs\diagrama_clases.dot', 'w', encoding='utf-8') as f:
+    f.write(clases)
+
+subprocess.run([dot_path, '-Kdot', '-Tpng',
+    r'D:\projects\SanMartinDigital\sanmartin-newbackend\docs\diagrama_clases.dot',
+    '-o', r'D:\projects\SanMartinDigital\sanmartin-newbackend\docs\diagrama_clases_sanmartin.png',
+    '-Gdpi=250'], check=True)
+print('[OK] Diagrama de Clases UML')
