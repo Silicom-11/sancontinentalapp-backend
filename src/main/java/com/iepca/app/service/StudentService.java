@@ -4,13 +4,18 @@ import com.iepca.app.exception.BadRequestException;
 import com.iepca.app.exception.ResourceNotFoundException;
 import com.iepca.app.model.Parent;
 import com.iepca.app.model.Student;
+import com.iepca.app.model.User;
 import com.iepca.app.repository.ParentRepository;
 import com.iepca.app.repository.StudentRepository;
+import com.iepca.app.repository.UserRepository;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
+import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 
+import java.time.Instant;
 import java.util.List;
+import java.util.Locale;
 
 @Service
 public class StudentService {
@@ -19,10 +24,17 @@ public class StudentService {
 
     private final StudentRepository studentRepository;
     private final ParentRepository parentRepository;
+    private final UserRepository userRepository;
+    private final PasswordEncoder passwordEncoder;
 
-    public StudentService(StudentRepository studentRepository, ParentRepository parentRepository) {
+    public StudentService(StudentRepository studentRepository,
+                          ParentRepository parentRepository,
+                          UserRepository userRepository,
+                          PasswordEncoder passwordEncoder) {
         this.studentRepository = studentRepository;
         this.parentRepository = parentRepository;
+        this.userRepository = userRepository;
+        this.passwordEncoder = passwordEncoder;
     }
 
     public List<Student> findAll() {
@@ -50,8 +62,64 @@ public class StudentService {
                     java.time.Year.now().getValue(), count));
         }
         Student saved = studentRepository.save(student);
+
+        // Crear automáticamente la cuenta de acceso del estudiante para que
+        // pueda iniciar sesión desde su propio dispositivo y emitir su GPS real.
+        String userId = createStudentAccount(saved);
+        if (userId != null) {
+            saved.setUserId(userId);
+            saved = studentRepository.save(saved);
+        }
+
         logger.info("Estudiante creado: {} ({})", saved.getFullName(), saved.getStudentCode());
         return saved;
+    }
+
+    /**
+     * Crea una cuenta de usuario (rol estudiante) vinculada al estudiante.
+     * Email: el del estudiante si viene, o generado desde nombre + DNI.
+     * Contraseña inicial: su DNI (el estudiante puede cambiarla luego).
+     * Devuelve el id del usuario creado, o null si no se pudo/ya existe.
+     */
+    private String createStudentAccount(Student student) {
+        String email = student.getEmail();
+        if (email == null || email.isBlank()) {
+            String base = (safe(student.getFirstName()) + "." + safe(student.getLastName()))
+                    .replaceAll("[^a-z0-9.]", "");
+            String suffix = student.getDni() != null && student.getDni().length() >= 4
+                    ? student.getDni().substring(student.getDni().length() - 4)
+                    : String.valueOf(System.currentTimeMillis() % 10000);
+            email = base + suffix + "@iepca.edu.pe";
+        }
+        if (userRepository.existsByEmail(email)) {
+            logger.warn("No se creó cuenta: el email {} ya existe", email);
+            return null;
+        }
+
+        String rawPassword = student.getDni() != null && !student.getDni().isBlank()
+                ? student.getDni() : "Continental2026";
+
+        User user = User.builder()
+                .firstName(student.getFirstName())
+                .lastName(student.getLastName())
+                .email(email)
+                .dni(student.getDni())
+                .phone(student.getPhone())
+                .password(passwordEncoder.encode(rawPassword))
+                .role("estudiante")
+                .isActive(true)
+                .isVerified(true)
+                .studentProfile(student.getId())
+                .createdAt(Instant.now())
+                .updatedAt(Instant.now())
+                .build();
+        User savedUser = userRepository.save(user);
+        logger.info("Cuenta de estudiante creada: {} (contraseña inicial = DNI)", email);
+        return savedUser.getId();
+    }
+
+    private String safe(String value) {
+        return value == null ? "" : value.trim().toLowerCase(Locale.ROOT);
     }
 
     public Student update(String id, Student updated) {
