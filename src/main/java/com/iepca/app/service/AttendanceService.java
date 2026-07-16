@@ -108,13 +108,18 @@ public class AttendanceService {
     }
 
     public Map<String, Object> getStats(String dateStr) {
-        String date = dateStr != null ? dateStr : LocalDate.now(ZoneId.of("America/Lima")).toString();
-        Instant start = LocalDate.parse(date).atStartOfDay(ZoneId.of("America/Lima")).toInstant();
-        Instant end = start.plusSeconds(86400);
-
-        List<Attendance> records = attendanceRepository.findAll().stream()
-                .filter(a -> a.getDate() != null && !a.getDate().isBefore(start) && a.getDate().isBefore(end))
-                .toList();
+        List<Attendance> records;
+        if (dateStr != null && !dateStr.isBlank()) {
+            // Stats for a specific day.
+            Instant start = LocalDate.parse(dateStr).atStartOfDay(ZoneId.of("America/Lima")).toInstant();
+            Instant end = start.plusSeconds(86400);
+            records = attendanceRepository.findAll().stream()
+                    .filter(a -> a.getDate() != null && !a.getDate().isBefore(start) && a.getDate().isBefore(end))
+                    .toList();
+        } else {
+            // No date provided: aggregate every attendance record (institution-wide).
+            records = attendanceRepository.findAll();
+        }
 
         long present = records.stream().filter(a -> "present".equals(a.getStatus())).count();
         long absent = records.stream().filter(a -> "absent".equals(a.getStatus())).count();

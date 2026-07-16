@@ -9,9 +9,12 @@ db = db.getSiblingDB('iep_continental_db');
   'institutions', 'academicyears', 'gradelevels', 'subjects', 'classrooms',
   'students', 'teachers', 'parents',
   'coursesections', 'courses', 'enrollments', 'grades', 'attendances',
-  'evaluations', 'events', 'justifications', 'locations', 'messages',
-  'conversations', 'notifications'
+  'evaluations', 'events', 'justifications', 'locations', 'notifications'
 ].forEach(name => db[name].deleteMany({}));
+
+// Messaging is out of scope for IEP Continental Americano — drop any legacy data
+db.messages.deleteMany({});
+db.conversations.deleteMany({});
 
 function requireUser(email) {
   const user = db.users.findOne({ email });
@@ -358,25 +361,7 @@ db.notifications.insertMany([
 ]);
 print("✓ 6 Notifications created");
 
-// ===== 16. CONVERSATIONS & MESSAGES =====
-const conv1 = ObjectId(); // Parent-Teacher direct conversation
-const conv2 = ObjectId(); // Admin-Teacher direct conversation
-
-db.conversations.insertMany([
-  { _id: conv1, participants: [padreId.toString(), docenteId.toString()], type: "direct", name: null, lastMessage: { content: "Gracias profesor, lo tendré en cuenta.", sender: padreId.toString(), timestamp: new Date() }, unreadCount: {}, isActive: true, createdAt: new Date(), updatedAt: new Date() },
-  { _id: conv2, participants: [adminId.toString(), docenteId.toString()], type: "direct", name: null, lastMessage: { content: "Entendido, enviaré el informe mañana.", sender: docenteId.toString(), timestamp: new Date() }, unreadCount: {}, isActive: true, createdAt: new Date(), updatedAt: new Date() },
-]);
-
-db.messages.insertMany([
-  { conversation: conv1.toString(), sender: padreId.toString(), content: "Buenos días profesor, ¿cómo va el rendimiento de Juan en Matemática?", type: "text", readBy: [{ user: padreId.toString(), readAt: new Date() }, { user: docenteId.toString(), readAt: new Date() }], isDeleted: false, createdAt: new Date(Date.now() - 86400000 * 2), updatedAt: new Date() },
-  { conversation: conv1.toString(), sender: docenteId.toString(), content: "Buenos días Sra. Lopez. Juan ha mejorado mucho este bimestre. Su promedio actual es 17.7 en Matemática. Sigue esforzándose.", type: "text", readBy: [{ user: docenteId.toString(), readAt: new Date() }, { user: padreId.toString(), readAt: new Date() }], isDeleted: false, createdAt: new Date(Date.now() - 86400000), updatedAt: new Date() },
-  { conversation: conv1.toString(), sender: padreId.toString(), content: "Gracias profesor, lo tendré en cuenta.", type: "text", readBy: [{ user: padreId.toString(), readAt: new Date() }], isDeleted: false, createdAt: new Date(), updatedAt: new Date() },
-  { conversation: conv2.toString(), sender: adminId.toString(), content: "Profesor Rodriguez, necesito el informe de notas del Bimestre I para la reunión directiva.", type: "text", readBy: [{ user: adminId.toString(), readAt: new Date() }, { user: docenteId.toString(), readAt: new Date() }], isDeleted: false, createdAt: new Date(Date.now() - 3600000), updatedAt: new Date() },
-  { conversation: conv2.toString(), sender: docenteId.toString(), content: "Entendido, enviaré el informe mañana.", type: "text", readBy: [{ user: docenteId.toString(), readAt: new Date() }], isDeleted: false, createdAt: new Date(), updatedAt: new Date() },
-]);
-print("✓ 2 Conversations & 5 Messages created");
-
-// ===== 17. JUSTIFICATION =====
+// ===== 16. JUSTIFICATION =====
 db.justifications.insertOne({
   student: student3.toString(), parent: null, dates: [new Date("2025-06-04")],
   reason: "Enfermedad", observations: "El alumno presentó malestar estomacal",
@@ -401,7 +386,6 @@ print("Enrollments: 5");
 print("Evaluations: 6 | Grades: 5");
 print("Attendance: 15 records");
 print("Events: 5 | Notifications: 6");
-print("Conversations: 2 | Messages: 5");
 print("Justifications: 1");
 print("========================================");
 print("\nTest Accounts:");

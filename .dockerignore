@@ -1,0 +1,15 @@
+target/
+.git/
+.venv/
+.vscode/
+.idea/
+logs/
+*.log
+backend-*.log
+backend-*.out.log
+backend-*.err.log
+*.env
+.env
+seed_newbackend.js
+write_props.py
+docs/

@@ -1,0 +1,19 @@
+# Blueprint de Render para el backend de IEP Continental Americano.
+# Al conectar el repo en Render, este archivo puede autoconfigurar el servicio.
+services:
+  - type: web
+    name: sancontinentalapp-backend
+    runtime: docker
+    dockerfilePath: ./Dockerfile
+    plan: free
+    region: oregon
+    healthCheckPath: /api/health
+    envVars:
+      # Estos valores se configuran en el panel de Render (marcados sync:false
+      # para que NO se guarden en el repositorio).
+      - key: MONGODB_URI
+        sync: false
+      - key: JWT_SECRET
+        sync: false
+      - key: CORS_ORIGINS
+        value: "*"
