@@ -74,8 +74,8 @@ db.institutions.insertOne({
   name: "IEP Continental Americano",
   code: "IEPCA001",
   logo: null,
-  address: { street: "Av. Continental 456", district: "Continental Americano de Porres", city: "Lima", region: "Lima", postalCode: "15100" },
-  phone: "01-5551234",
+  address: { street: "Av. Marginal 456", district: "Pichanaki", city: "Chanchamayo", region: "Junín", postalCode: "12841" },
+  phone: "064-541234",
   email: "info@iepca.edu.pe",
   website: "https://www.iepca.edu.pe",
   director: adminId.toString(),
@@ -98,21 +98,21 @@ const ayId = ObjectId();
 db.academicyears.insertOne({
   _id: ayId,
   institution: instId.toString(),
-  year: 2025,
-  name: "Año Académico 2025",
-  startDate: new Date("2025-03-03"),
-  endDate: new Date("2025-12-19"),
+  year: 2026,
+  name: "Año Académico 2026",
+  startDate: new Date("2026-03-02"),
+  endDate: new Date("2026-12-18"),
   periods: [
-    { name: "Bimestre I", number: 1, startDate: new Date("2025-03-03"), endDate: new Date("2025-05-09"), isActive: false, gradesLocked: false, status: "finalizado" },
-    { name: "Bimestre II", number: 2, startDate: new Date("2025-05-12"), endDate: new Date("2025-07-18"), isActive: true, gradesLocked: false, status: "activo" },
-    { name: "Bimestre III", number: 3, startDate: new Date("2025-08-11"), endDate: new Date("2025-10-17"), isActive: false, gradesLocked: false, status: "planificacion" },
-    { name: "Bimestre IV", number: 4, startDate: new Date("2025-10-20"), endDate: new Date("2025-12-19"), isActive: false, gradesLocked: false, status: "planificacion" }
+    { name: "Bimestre I", number: 1, startDate: new Date("2026-03-02"), endDate: new Date("2026-05-08"), isActive: false, gradesLocked: false, status: "finalizado" },
+    { name: "Bimestre II", number: 2, startDate: new Date("2026-05-11"), endDate: new Date("2026-07-17"), isActive: true, gradesLocked: false, status: "activo" },
+    { name: "Bimestre III", number: 3, startDate: new Date("2026-08-10"), endDate: new Date("2026-10-16"), isActive: false, gradesLocked: false, status: "planificacion" },
+    { name: "Bimestre IV", number: 4, startDate: new Date("2026-10-19"), endDate: new Date("2026-12-18"), isActive: false, gradesLocked: false, status: "planificacion" }
   ],
   importantDates: [
-    { name: "Inicio de clases", date: new Date("2025-03-03"), type: "academic" },
-    { name: "Día del Maestro", date: new Date("2025-07-06"), type: "holiday" },
-    { name: "Fiestas Patrias", date: new Date("2025-07-28"), type: "holiday" },
-    { name: "Fin de año escolar", date: new Date("2025-12-19"), type: "academic" }
+    { name: "Inicio de clases", date: new Date("2026-03-02"), type: "academic" },
+    { name: "Día del Maestro", date: new Date("2026-07-06"), type: "holiday" },
+    { name: "Fiestas Patrias", date: new Date("2026-07-28"), type: "holiday" },
+    { name: "Fin de año escolar", date: new Date("2026-12-18"), type: "academic" }
   ],
   isCurrent: true,
   status: "activo",
@@ -197,11 +197,11 @@ const student4 = ObjectId(); // Lucia Mendoza
 const student5 = ObjectId(); // Mateo Herrera
 
 db.students.insertMany([
-  { _id: student1, firstName: "Juan", lastName: "Perez", dni: "55667788", email: "alumno@iepca.edu.pe", phone: "999555666", birthDate: new Date("2010-05-15"), gender: "M", photo: null, address: { street: "Jr. Los Olivos 123", district: "Continental Americano de Porres", city: "Lima", reference: "Cerca al parque" }, gradeLevel: "3° Secundaria", section: "A", studentCode: "EST-2025-0001", enrollmentNumber: "MAT-2025-001", guardians: [{ student: padreId.toString(), relationship: "padre", isPrimaryContact: true, canPickUp: true, isEmergencyContact: true }], medicalInfo: { bloodType: "O+", allergies: [], conditions: [], medications: [] }, status: "activo", isActive: true, userId: alumnoId.toString(), createdAt: new Date(), updatedAt: new Date() },
-  { _id: student2, firstName: "Sofia", lastName: "Ramirez", dni: "66778899", email: "sofia.ramirez@iepca.edu.pe", phone: "998877663", birthDate: new Date("2010-08-22"), gender: "F", photo: null, address: { street: "Av. Peru 456", district: "Los Olivos", city: "Lima" }, gradeLevel: "3° Secundaria", section: "A", studentCode: "EST-2025-0002", enrollmentNumber: "MAT-2025-002", guardians: [{ student: padre2Id.toString(), relationship: "padre", isPrimaryContact: true, canPickUp: true, isEmergencyContact: true }], medicalInfo: { bloodType: "A+", allergies: [], conditions: [], medications: [] }, status: "activo", isActive: true, userId: alumno2Id.toString(), createdAt: new Date(), updatedAt: new Date() },
-  { _id: student3, firstName: "Diego", lastName: "Torres", dni: "77889900", email: "diego.torres@iepca.edu.pe", phone: "998877664", birthDate: new Date("2010-03-10"), gender: "M", photo: null, address: { street: "Calle Las Flores 789", district: "Independencia", city: "Lima" }, gradeLevel: "3° Secundaria", section: "A", studentCode: "EST-2025-0003", enrollmentNumber: "MAT-2025-003", guardians: [], medicalInfo: { bloodType: "B+", allergies: ["Penicilina"], conditions: [], medications: [] }, status: "activo", isActive: true, userId: alumno3Id.toString(), createdAt: new Date(), updatedAt: new Date() },
-  { _id: student4, firstName: "Lucia", lastName: "Mendoza", dni: "88990011", email: "lucia.mendoza@iepca.edu.pe", phone: "998877665", birthDate: new Date("2009-11-03"), gender: "F", photo: null, address: { street: "Jr. Union 321", district: "Continental Americano de Porres", city: "Lima" }, gradeLevel: "4° Secundaria", section: "A", studentCode: "EST-2025-0004", enrollmentNumber: "MAT-2025-004", guardians: [], medicalInfo: { bloodType: "AB+", allergies: [], conditions: [], medications: [] }, status: "activo", isActive: true, userId: alumno4Id.toString(), createdAt: new Date(), updatedAt: new Date() },
-  { _id: student5, firstName: "Mateo", lastName: "Herrera", dni: "99001122", email: "mateo.herrera@iepca.edu.pe", phone: "998877666", birthDate: new Date("2008-07-19"), gender: "M", photo: null, address: { street: "Av. Tupac Amaru 567", district: "Comas", city: "Lima" }, gradeLevel: "5° Secundaria", section: "A", studentCode: "EST-2025-0005", enrollmentNumber: "MAT-2025-005", guardians: [], medicalInfo: { bloodType: "O-", allergies: [], conditions: [], medications: [] }, status: "activo", isActive: true, userId: alumno5Id.toString(), createdAt: new Date(), updatedAt: new Date() },
+  { _id: student1, firstName: "Juan", lastName: "Perez", dni: "55667788", email: "alumno@iepca.edu.pe", phone: "999555666", birthDate: new Date("2010-05-15"), gender: "M", photo: null, address: { street: "Jr. Los Cedros 123", district: "Pichanaki", city: "Chanchamayo", reference: "Cerca al parque central" }, gradeLevel: "3° Secundaria", section: "A", studentCode: "EST-2026-0001", enrollmentNumber: "MAT-2026-001", guardians: [{ student: padreId.toString(), relationship: "padre", isPrimaryContact: true, canPickUp: true, isEmergencyContact: true }], medicalInfo: { bloodType: "O+", allergies: [], conditions: [], medications: [] }, status: "activo", isActive: true, userId: alumnoId.toString(), createdAt: new Date(), updatedAt: new Date() },
+  { _id: student2, firstName: "Sofia", lastName: "Ramirez", dni: "66778899", email: "sofia.ramirez@iepca.edu.pe", phone: "998877663", birthDate: new Date("2010-08-22"), gender: "F", photo: null, address: { street: "Av. Marginal 456", district: "Pichanaki", city: "Chanchamayo" }, gradeLevel: "3° Secundaria", section: "A", studentCode: "EST-2026-0002", enrollmentNumber: "MAT-2026-002", guardians: [{ student: padre2Id.toString(), relationship: "padre", isPrimaryContact: true, canPickUp: true, isEmergencyContact: true }], medicalInfo: { bloodType: "A+", allergies: [], conditions: [], medications: [] }, status: "activo", isActive: true, userId: alumno2Id.toString(), createdAt: new Date(), updatedAt: new Date() },
+  { _id: student3, firstName: "Diego", lastName: "Torres", dni: "77889900", email: "diego.torres@iepca.edu.pe", phone: "998877664", birthDate: new Date("2010-03-10"), gender: "M", photo: null, address: { street: "Calle Las Flores 789", district: "Pichanaki", city: "Chanchamayo" }, gradeLevel: "3° Secundaria", section: "A", studentCode: "EST-2026-0003", enrollmentNumber: "MAT-2026-003", guardians: [], medicalInfo: { bloodType: "B+", allergies: ["Penicilina"], conditions: [], medications: [] }, status: "activo", isActive: true, userId: alumno3Id.toString(), createdAt: new Date(), updatedAt: new Date() },
+  { _id: student4, firstName: "Lucia", lastName: "Mendoza", dni: "88990011", email: "lucia.mendoza@iepca.edu.pe", phone: "998877665", birthDate: new Date("2009-11-03"), gender: "F", photo: null, address: { street: "Jr. Union 321", district: "Pichanaki", city: "Chanchamayo" }, gradeLevel: "4° Secundaria", section: "A", studentCode: "EST-2026-0004", enrollmentNumber: "MAT-2026-004", guardians: [], medicalInfo: { bloodType: "AB+", allergies: [], conditions: [], medications: [] }, status: "activo", isActive: true, userId: alumno4Id.toString(), createdAt: new Date(), updatedAt: new Date() },
+  { _id: student5, firstName: "Mateo", lastName: "Herrera", dni: "99001122", email: "mateo.herrera@iepca.edu.pe", phone: "998877666", birthDate: new Date("2008-07-19"), gender: "M", photo: null, address: { street: "Av. Colonización 567", district: "Pichanaki", city: "Chanchamayo" }, gradeLevel: "5° Secundaria", section: "A", studentCode: "EST-2026-0005", enrollmentNumber: "MAT-2026-005", guardians: [], medicalInfo: { bloodType: "O-", allergies: [], conditions: [], medications: [] }, status: "activo", isActive: true, userId: alumno5Id.toString(), createdAt: new Date(), updatedAt: new Date() },
 ]);
 
 // Link student profiles to user accounts
@@ -218,9 +218,9 @@ const teacher2 = ObjectId(); // Ana Garcia
 const teacher3 = ObjectId(); // Pedro Sanchez
 
 db.teachers.insertMany([
-  { _id: teacher1, firstName: "Carlos", lastName: "Rodriguez", dni: "87654321", email: "docente@iepca.edu.pe", phone: "999111222", birthDate: new Date("1985-06-15"), gender: "M", photo: null, address: { street: "Av. Universitaria 1234", district: "Continental Americano de Porres", city: "Lima" }, employeeCode: "DOC-2025-001", specialty: "Matemáticas", academicDegree: "Licenciado", professionalTitle: "Licenciado en Educación - Matemáticas", contractType: "nombrado", isActive: true, userId: docenteId.toString(), institution: instId.toString(), createdAt: new Date(), updatedAt: new Date() },
-  { _id: teacher2, firstName: "Ana", lastName: "Garcia", dni: "22334455", email: "ana.garcia@iepca.edu.pe", phone: "998877661", birthDate: new Date("1990-02-28"), gender: "F", photo: null, address: { street: "Jr. Huascar 567", district: "Los Olivos", city: "Lima" }, employeeCode: "DOC-2025-002", specialty: "Comunicación", academicDegree: "Magister", professionalTitle: "Licenciada en Educación - Comunicación", contractType: "contratado", isActive: true, userId: docente2Id.toString(), institution: instId.toString(), createdAt: new Date(), updatedAt: new Date() },
-  { _id: teacher3, firstName: "Pedro", lastName: "Sanchez", dni: "33445566", email: "pedro.sanchez@iepca.edu.pe", phone: "998877662", birthDate: new Date("1988-09-12"), gender: "M", photo: null, address: { street: "Calle Los Pinos 890", district: "Independencia", city: "Lima" }, employeeCode: "DOC-2025-003", specialty: "Ciencia y Tecnología", academicDegree: "Licenciado", professionalTitle: "Licenciado en Biología", contractType: "contratado", isActive: true, userId: docente3Id.toString(), institution: instId.toString(), createdAt: new Date(), updatedAt: new Date() },
+  { _id: teacher1, firstName: "Carlos", lastName: "Rodriguez", dni: "87654321", email: "docente@iepca.edu.pe", phone: "999111222", birthDate: new Date("1985-06-15"), gender: "M", photo: null, address: { street: "Av. Marginal 1234", district: "Pichanaki", city: "Chanchamayo" }, employeeCode: "DOC-2026-001", specialty: "Matemáticas", academicDegree: "Licenciado", professionalTitle: "Licenciado en Educación - Matemáticas", contractType: "nombrado", isActive: true, userId: docenteId.toString(), institution: instId.toString(), createdAt: new Date(), updatedAt: new Date() },
+  { _id: teacher2, firstName: "Ana", lastName: "Garcia", dni: "22334455", email: "ana.garcia@iepca.edu.pe", phone: "998877661", birthDate: new Date("1990-02-28"), gender: "F", photo: null, address: { street: "Jr. Huascar 567", district: "Pichanaki", city: "Chanchamayo" }, employeeCode: "DOC-2026-002", specialty: "Comunicación", academicDegree: "Magister", professionalTitle: "Licenciada en Educación - Comunicación", contractType: "contratado", isActive: true, userId: docente2Id.toString(), institution: instId.toString(), createdAt: new Date(), updatedAt: new Date() },
+  { _id: teacher3, firstName: "Pedro", lastName: "Sanchez", dni: "33445566", email: "pedro.sanchez@iepca.edu.pe", phone: "998877662", birthDate: new Date("1988-09-12"), gender: "M", photo: null, address: { street: "Calle Los Pinos 890", district: "Pichanaki", city: "Chanchamayo" }, employeeCode: "DOC-2026-003", specialty: "Ciencia y Tecnología", academicDegree: "Licenciado", professionalTitle: "Licenciado en Biología", contractType: "contratado", isActive: true, userId: docente3Id.toString(), institution: instId.toString(), createdAt: new Date(), updatedAt: new Date() },
 ]);
 print("✓ 3 Teachers created");
 
@@ -235,8 +235,8 @@ const defaultNotificationPrefs = {
 };
 
 db.parents.insertMany([
-  { _id: parent1, firstName: "Maria", lastName: "Lopez", dni: "11223344", email: "padre@iepca.edu.pe", phone: "999333444", birthDate: new Date("1980-04-20"), gender: "F", photo: null, address: { street: "Jr. Los Olivos 123", district: "Continental Americano de Porres", city: "Lima", reference: "Cerca al parque" }, occupation: "Contadora", workplace: "Empresa ABC SAC", children: [{ student: student1.toString(), relationship: "madre", isPrimaryContact: true, canPickUp: true, isEmergencyContact: true }], notifications: defaultNotificationPrefs, isActive: true, isVerified: true, userId: padreId.toString(), createdAt: new Date(), updatedAt: new Date() },
-  { _id: parent2, firstName: "Roberto", lastName: "Ramirez", dni: "44556677", email: "roberto.ramirez@iepca.edu.pe", phone: "998877667", birthDate: new Date("1978-11-05"), gender: "M", photo: null, address: { street: "Av. Peru 456", district: "Los Olivos", city: "Lima" }, occupation: "Ingeniero", workplace: "Constructora XYZ", children: [{ student: student2.toString(), relationship: "padre", isPrimaryContact: true, canPickUp: true, isEmergencyContact: true }], notifications: defaultNotificationPrefs, isActive: true, isVerified: true, userId: padre2Id.toString(), createdAt: new Date(), updatedAt: new Date() },
+  { _id: parent1, firstName: "Maria", lastName: "Lopez", dni: "11223344", email: "padre@iepca.edu.pe", phone: "999333444", birthDate: new Date("1980-04-20"), gender: "F", photo: null, address: { street: "Jr. Los Cedros 123", district: "Pichanaki", city: "Chanchamayo", reference: "Cerca al parque central" }, occupation: "Contadora", workplace: "Empresa ABC SAC", children: [{ student: student1.toString(), relationship: "madre", isPrimaryContact: true, canPickUp: true, isEmergencyContact: true }], notifications: defaultNotificationPrefs, isActive: true, isVerified: true, userId: padreId.toString(), createdAt: new Date(), updatedAt: new Date() },
+  { _id: parent2, firstName: "Roberto", lastName: "Ramirez", dni: "44556677", email: "roberto.ramirez@iepca.edu.pe", phone: "998877667", birthDate: new Date("1978-11-05"), gender: "M", photo: null, address: { street: "Av. Marginal 456", district: "Pichanaki", city: "Chanchamayo" }, occupation: "Ingeniero", workplace: "Constructora XYZ", children: [{ student: student2.toString(), relationship: "padre", isPrimaryContact: true, canPickUp: true, isEmergencyContact: true }], notifications: defaultNotificationPrefs, isActive: true, isVerified: true, userId: padre2Id.toString(), createdAt: new Date(), updatedAt: new Date() },
 ]);
 
 // Link children to parent users
@@ -262,22 +262,22 @@ const course5 = ObjectId();
 const course6 = ObjectId();
 
 db.courses.insertMany([
-  { _id: course1, name: "Matemática - 3°A", code: "MAT-3A-2025", description: "Matemática para 3° Secundaria A", gradeLevel: "3° Secundaria", section: "A", teacher: docenteId.toString(), students: students3A, schedule: [{ day: "Lunes", startTime: "08:00", endTime: "09:30", classroom: "201" }, { day: "Miércoles", startTime: "08:00", endTime: "09:30", classroom: "201" }, { day: "Viernes", startTime: "08:00", endTime: "09:30", classroom: "201" }], evaluationWeights: { examen: 40, tarea: 20, proyecto: 20, participacion: 10, practica: 10 }, academicYear: 2025, period: "Anual", isActive: true, createdAt: new Date(), updatedAt: new Date() },
-  { _id: course2, name: "Comunicación - 3°A", code: "COM-3A-2025", description: "Comunicación para 3° Secundaria A", gradeLevel: "3° Secundaria", section: "A", teacher: docente2Id.toString(), students: students3A, schedule: [{ day: "Lunes", startTime: "09:45", endTime: "11:15", classroom: "201" }, { day: "Jueves", startTime: "08:00", endTime: "09:30", classroom: "201" }], evaluationWeights: { examen: 40, tarea: 20, proyecto: 20, participacion: 10, practica: 10 }, academicYear: 2025, period: "Anual", isActive: true, createdAt: new Date(), updatedAt: new Date() },
-  { _id: course3, name: "Ciencia y Tecnología - 3°A", code: "CYT-3A-2025", description: "CyT para 3° Secundaria A", gradeLevel: "3° Secundaria", section: "A", teacher: docente3Id.toString(), students: students3A, schedule: [{ day: "Martes", startTime: "08:00", endTime: "09:30", classroom: "Lab-1" }, { day: "Jueves", startTime: "09:45", endTime: "11:15", classroom: "Lab-1" }], evaluationWeights: { examen: 40, tarea: 20, proyecto: 20, participacion: 10, practica: 10 }, academicYear: 2025, period: "Anual", isActive: true, createdAt: new Date(), updatedAt: new Date() },
-  { _id: course4, name: "Personal Social - 3°A", code: "PS-3A-2025", description: "Personal Social para 3° Secundaria A", gradeLevel: "3° Secundaria", section: "A", teacher: docenteId.toString(), students: students3A, schedule: [{ day: "Martes", startTime: "09:45", endTime: "11:15", classroom: "201" }, { day: "Viernes", startTime: "09:45", endTime: "11:15", classroom: "201" }], evaluationWeights: { examen: 40, tarea: 20, proyecto: 20, participacion: 10, practica: 10 }, academicYear: 2025, period: "Anual", isActive: true, createdAt: new Date(), updatedAt: new Date() },
-  { _id: course5, name: "Educación Física - 3°A", code: "EF-3A-2025", description: "Educación Física para 3° Secundaria A", gradeLevel: "3° Secundaria", section: "A", teacher: docente3Id.toString(), students: students3A, schedule: [{ day: "Miércoles", startTime: "09:45", endTime: "11:15", classroom: "Cancha" }], evaluationWeights: { examen: 20, tarea: 10, proyecto: 20, participacion: 30, practica: 20 }, academicYear: 2025, period: "Anual", isActive: true, createdAt: new Date(), updatedAt: new Date() },
-  { _id: course6, name: "Inglés - 3°A", code: "ING-3A-2025", description: "Inglés para 3° Secundaria A", gradeLevel: "3° Secundaria", section: "A", teacher: docente2Id.toString(), students: students3A, schedule: [{ day: "Miércoles", startTime: "11:30", endTime: "13:00", classroom: "201" }, { day: "Viernes", startTime: "11:30", endTime: "13:00", classroom: "201" }], evaluationWeights: { examen: 40, tarea: 20, proyecto: 20, participacion: 10, practica: 10 }, academicYear: 2025, period: "Anual", isActive: true, createdAt: new Date(), updatedAt: new Date() },
+  { _id: course1, name: "Matemática - 3°A", code: "MAT-3A-2026", description: "Matemática para 3° Secundaria A", gradeLevel: "3° Secundaria", section: "A", teacher: docenteId.toString(), students: students3A, schedule: [{ day: "Lunes", startTime: "08:00", endTime: "09:30", classroom: "201" }, { day: "Miércoles", startTime: "08:00", endTime: "09:30", classroom: "201" }, { day: "Viernes", startTime: "08:00", endTime: "09:30", classroom: "201" }], evaluationWeights: { examen: 40, tarea: 20, proyecto: 20, participacion: 10, practica: 10 }, academicYear: 2026, period: "Anual", isActive: true, createdAt: new Date(), updatedAt: new Date() },
+  { _id: course2, name: "Comunicación - 3°A", code: "COM-3A-2026", description: "Comunicación para 3° Secundaria A", gradeLevel: "3° Secundaria", section: "A", teacher: docente2Id.toString(), students: students3A, schedule: [{ day: "Lunes", startTime: "09:45", endTime: "11:15", classroom: "201" }, { day: "Jueves", startTime: "08:00", endTime: "09:30", classroom: "201" }], evaluationWeights: { examen: 40, tarea: 20, proyecto: 20, participacion: 10, practica: 10 }, academicYear: 2026, period: "Anual", isActive: true, createdAt: new Date(), updatedAt: new Date() },
+  { _id: course3, name: "Ciencia y Tecnología - 3°A", code: "CYT-3A-2026", description: "CyT para 3° Secundaria A", gradeLevel: "3° Secundaria", section: "A", teacher: docente3Id.toString(), students: students3A, schedule: [{ day: "Martes", startTime: "08:00", endTime: "09:30", classroom: "Lab-1" }, { day: "Jueves", startTime: "09:45", endTime: "11:15", classroom: "Lab-1" }], evaluationWeights: { examen: 40, tarea: 20, proyecto: 20, participacion: 10, practica: 10 }, academicYear: 2026, period: "Anual", isActive: true, createdAt: new Date(), updatedAt: new Date() },
+  { _id: course4, name: "Personal Social - 3°A", code: "PS-3A-2026", description: "Personal Social para 3° Secundaria A", gradeLevel: "3° Secundaria", section: "A", teacher: docenteId.toString(), students: students3A, schedule: [{ day: "Martes", startTime: "09:45", endTime: "11:15", classroom: "201" }, { day: "Viernes", startTime: "09:45", endTime: "11:15", classroom: "201" }], evaluationWeights: { examen: 40, tarea: 20, proyecto: 20, participacion: 10, practica: 10 }, academicYear: 2026, period: "Anual", isActive: true, createdAt: new Date(), updatedAt: new Date() },
+  { _id: course5, name: "Educación Física - 3°A", code: "EF-3A-2026", description: "Educación Física para 3° Secundaria A", gradeLevel: "3° Secundaria", section: "A", teacher: docente3Id.toString(), students: students3A, schedule: [{ day: "Miércoles", startTime: "09:45", endTime: "11:15", classroom: "Cancha" }], evaluationWeights: { examen: 20, tarea: 10, proyecto: 20, participacion: 30, practica: 20 }, academicYear: 2026, period: "Anual", isActive: true, createdAt: new Date(), updatedAt: new Date() },
+  { _id: course6, name: "Inglés - 3°A", code: "ING-3A-2026", description: "Inglés para 3° Secundaria A", gradeLevel: "3° Secundaria", section: "A", teacher: docente2Id.toString(), students: students3A, schedule: [{ day: "Miércoles", startTime: "11:30", endTime: "13:00", classroom: "201" }, { day: "Viernes", startTime: "11:30", endTime: "13:00", classroom: "201" }], evaluationWeights: { examen: 40, tarea: 20, proyecto: 20, participacion: 10, practica: 10 }, academicYear: 2026, period: "Anual", isActive: true, createdAt: new Date(), updatedAt: new Date() },
 ]);
 print("✓ 6 Courses created");
 
 // ===== 10. ENROLLMENTS =====
 db.enrollments.insertMany([
-  { student: student1.toString(), classroom: classroom3A.toString(), academicYear: ayId.toString(), enrollmentDate: new Date("2025-02-15"), enrollmentNumber: "MAT-2025-001", status: "matriculado", enrollmentType: "regular", isActive: true, createdAt: new Date(), updatedAt: new Date() },
-  { student: student2.toString(), classroom: classroom3A.toString(), academicYear: ayId.toString(), enrollmentDate: new Date("2025-02-15"), enrollmentNumber: "MAT-2025-002", status: "matriculado", enrollmentType: "regular", isActive: true, createdAt: new Date(), updatedAt: new Date() },
-  { student: student3.toString(), classroom: classroom3A.toString(), academicYear: ayId.toString(), enrollmentDate: new Date("2025-02-16"), enrollmentNumber: "MAT-2025-003", status: "matriculado", enrollmentType: "regular", isActive: true, createdAt: new Date(), updatedAt: new Date() },
-  { student: student4.toString(), classroom: classroom4A.toString(), academicYear: ayId.toString(), enrollmentDate: new Date("2025-02-16"), enrollmentNumber: "MAT-2025-004", status: "matriculado", enrollmentType: "regular", isActive: true, createdAt: new Date(), updatedAt: new Date() },
-  { student: student5.toString(), classroom: classroom5A.toString(), academicYear: ayId.toString(), enrollmentDate: new Date("2025-02-17"), enrollmentNumber: "MAT-2025-005", status: "matriculado", enrollmentType: "regular", isActive: true, createdAt: new Date(), updatedAt: new Date() },
+  { student: student1.toString(), classroom: classroom3A.toString(), academicYear: ayId.toString(), enrollmentDate: new Date("2026-02-15"), enrollmentNumber: "MAT-2026-001", status: "matriculado", enrollmentType: "regular", isActive: true, createdAt: new Date(), updatedAt: new Date() },
+  { student: student2.toString(), classroom: classroom3A.toString(), academicYear: ayId.toString(), enrollmentDate: new Date("2026-02-15"), enrollmentNumber: "MAT-2026-002", status: "matriculado", enrollmentType: "regular", isActive: true, createdAt: new Date(), updatedAt: new Date() },
+  { student: student3.toString(), classroom: classroom3A.toString(), academicYear: ayId.toString(), enrollmentDate: new Date("2026-02-16"), enrollmentNumber: "MAT-2026-003", status: "matriculado", enrollmentType: "regular", isActive: true, createdAt: new Date(), updatedAt: new Date() },
+  { student: student4.toString(), classroom: classroom4A.toString(), academicYear: ayId.toString(), enrollmentDate: new Date("2026-02-16"), enrollmentNumber: "MAT-2026-004", status: "matriculado", enrollmentType: "regular", isActive: true, createdAt: new Date(), updatedAt: new Date() },
+  { student: student5.toString(), classroom: classroom5A.toString(), academicYear: ayId.toString(), enrollmentDate: new Date("2026-02-17"), enrollmentNumber: "MAT-2026-005", status: "matriculado", enrollmentType: "regular", isActive: true, createdAt: new Date(), updatedAt: new Date() },
 ]);
 print("✓ 5 Enrollments created");
 
@@ -290,27 +290,27 @@ const eval5 = ObjectId();
 const eval6 = ObjectId();
 
 db.evaluations.insertMany([
-  { _id: eval1, course: course1.toString(), teacher: docenteId.toString(), name: "Examen Parcial B1", type: "examen", bimester: 1, maxGrade: 20, weight: 2.0, date: new Date("2025-04-01"), description: "Ecuaciones lineales", academicYear: 2025, isActive: true, order: 1, createdAt: new Date(), updatedAt: new Date() },
-  { _id: eval2, course: course1.toString(), teacher: docenteId.toString(), name: "Tarea 1 - B1", type: "tarea", bimester: 1, maxGrade: 20, weight: 1.0, date: new Date("2025-03-15"), description: "Ejercicios cap 1-3", academicYear: 2025, isActive: true, order: 2, createdAt: new Date(), updatedAt: new Date() },
-  { _id: eval3, course: course1.toString(), teacher: docenteId.toString(), name: "Proyecto B1", type: "proyecto", bimester: 1, maxGrade: 20, weight: 1.5, date: new Date("2025-04-20"), description: "Proyecto de aplicación", academicYear: 2025, isActive: true, order: 3, createdAt: new Date(), updatedAt: new Date() },
-  { _id: eval4, course: course1.toString(), teacher: docenteId.toString(), name: "Examen Parcial B2", type: "examen", bimester: 2, maxGrade: 20, weight: 2.0, date: new Date("2025-06-10"), description: "Funciones y gráficas", academicYear: 2025, isActive: true, order: 1, createdAt: new Date(), updatedAt: new Date() },
-  { _id: eval5, course: course1.toString(), teacher: docenteId.toString(), name: "Tarea 1 - B2", type: "tarea", bimester: 2, maxGrade: 20, weight: 1.0, date: new Date("2025-05-20"), description: "Ejercicios funciones", academicYear: 2025, isActive: true, order: 2, createdAt: new Date(), updatedAt: new Date() },
-  { _id: eval6, course: course1.toString(), teacher: docenteId.toString(), name: "Práctica B2", type: "practica", bimester: 2, maxGrade: 20, weight: 1.0, date: new Date("2025-06-25"), description: "Práctica calificada", academicYear: 2025, isActive: true, order: 3, createdAt: new Date(), updatedAt: new Date() },
+  { _id: eval1, course: course1.toString(), teacher: docenteId.toString(), name: "Examen Parcial B1", type: "examen", bimester: 1, maxGrade: 20, weight: 2.0, date: new Date("2026-04-01"), description: "Ecuaciones lineales", academicYear: 2026, isActive: true, order: 1, createdAt: new Date(), updatedAt: new Date() },
+  { _id: eval2, course: course1.toString(), teacher: docenteId.toString(), name: "Tarea 1 - B1", type: "tarea", bimester: 1, maxGrade: 20, weight: 1.0, date: new Date("2026-03-15"), description: "Ejercicios cap 1-3", academicYear: 2026, isActive: true, order: 2, createdAt: new Date(), updatedAt: new Date() },
+  { _id: eval3, course: course1.toString(), teacher: docenteId.toString(), name: "Proyecto B1", type: "proyecto", bimester: 1, maxGrade: 20, weight: 1.5, date: new Date("2026-04-20"), description: "Proyecto de aplicación", academicYear: 2026, isActive: true, order: 3, createdAt: new Date(), updatedAt: new Date() },
+  { _id: eval4, course: course1.toString(), teacher: docenteId.toString(), name: "Examen Parcial B2", type: "examen", bimester: 2, maxGrade: 20, weight: 2.0, date: new Date("2026-06-10"), description: "Funciones y gráficas", academicYear: 2026, isActive: true, order: 1, createdAt: new Date(), updatedAt: new Date() },
+  { _id: eval5, course: course1.toString(), teacher: docenteId.toString(), name: "Tarea 1 - B2", type: "tarea", bimester: 2, maxGrade: 20, weight: 1.0, date: new Date("2026-05-20"), description: "Ejercicios funciones", academicYear: 2026, isActive: true, order: 2, createdAt: new Date(), updatedAt: new Date() },
+  { _id: eval6, course: course1.toString(), teacher: docenteId.toString(), name: "Práctica B2", type: "practica", bimester: 2, maxGrade: 20, weight: 1.0, date: new Date("2026-06-25"), description: "Práctica calificada", academicYear: 2026, isActive: true, order: 3, createdAt: new Date(), updatedAt: new Date() },
 ]);
 print("✓ 6 Evaluations created");
 
 // ===== 12. GRADES (Bimestre 1 completed, Bimestre 2 in progress) =====
 db.grades.insertMany([
   // Bimestre 1 - Juan Perez
-  { student: student1.toString(), course: course1.toString(), bimester: 1, academicYear: 2025, scores: [{ evaluationId: eval1.toString(), score: 16, weight: 2.0 }, { evaluationId: eval2.toString(), score: 18, weight: 1.0 }, { evaluationId: eval3.toString(), score: 15, weight: 1.5 }], average: 16.1, status: "cerrado", teacher: docenteId.toString(), closedAt: new Date("2025-05-09"), createdAt: new Date(), updatedAt: new Date() },
+  { student: student1.toString(), course: course1.toString(), bimester: 1, academicYear: 2026, scores: [{ evaluationId: eval1.toString(), score: 16, weight: 2.0 }, { evaluationId: eval2.toString(), score: 18, weight: 1.0 }, { evaluationId: eval3.toString(), score: 15, weight: 1.5 }], average: 16.1, status: "cerrado", teacher: docenteId.toString(), closedAt: new Date("2026-05-09"), createdAt: new Date(), updatedAt: new Date() },
   // Bimestre 1 - Sofia Ramirez
-  { student: student2.toString(), course: course1.toString(), bimester: 1, academicYear: 2025, scores: [{ evaluationId: eval1.toString(), score: 14, weight: 2.0 }, { evaluationId: eval2.toString(), score: 16, weight: 1.0 }, { evaluationId: eval3.toString(), score: 17, weight: 1.5 }], average: 15.4, status: "cerrado", teacher: docenteId.toString(), closedAt: new Date("2025-05-09"), createdAt: new Date(), updatedAt: new Date() },
+  { student: student2.toString(), course: course1.toString(), bimester: 1, academicYear: 2026, scores: [{ evaluationId: eval1.toString(), score: 14, weight: 2.0 }, { evaluationId: eval2.toString(), score: 16, weight: 1.0 }, { evaluationId: eval3.toString(), score: 17, weight: 1.5 }], average: 15.4, status: "cerrado", teacher: docenteId.toString(), closedAt: new Date("2026-05-09"), createdAt: new Date(), updatedAt: new Date() },
   // Bimestre 1 - Diego Torres
-  { student: student3.toString(), course: course1.toString(), bimester: 1, academicYear: 2025, scores: [{ evaluationId: eval1.toString(), score: 12, weight: 2.0 }, { evaluationId: eval2.toString(), score: 10, weight: 1.0 }, { evaluationId: eval3.toString(), score: 13, weight: 1.5 }], average: 11.9, status: "cerrado", teacher: docenteId.toString(), closedAt: new Date("2025-05-09"), createdAt: new Date(), updatedAt: new Date() },
+  { student: student3.toString(), course: course1.toString(), bimester: 1, academicYear: 2026, scores: [{ evaluationId: eval1.toString(), score: 12, weight: 2.0 }, { evaluationId: eval2.toString(), score: 10, weight: 1.0 }, { evaluationId: eval3.toString(), score: 13, weight: 1.5 }], average: 11.9, status: "cerrado", teacher: docenteId.toString(), closedAt: new Date("2026-05-09"), createdAt: new Date(), updatedAt: new Date() },
   // Bimestre 2 - Juan Perez (in progress)
-  { student: student1.toString(), course: course1.toString(), bimester: 2, academicYear: 2025, scores: [{ evaluationId: eval4.toString(), score: 17, weight: 2.0 }, { evaluationId: eval5.toString(), score: 19, weight: 1.0 }], average: 17.7, status: "abierto", teacher: docenteId.toString(), createdAt: new Date(), updatedAt: new Date() },
+  { student: student1.toString(), course: course1.toString(), bimester: 2, academicYear: 2026, scores: [{ evaluationId: eval4.toString(), score: 17, weight: 2.0 }, { evaluationId: eval5.toString(), score: 19, weight: 1.0 }], average: 17.7, status: "abierto", teacher: docenteId.toString(), createdAt: new Date(), updatedAt: new Date() },
   // Bimestre 2 - Sofia Ramirez (in progress)
-  { student: student2.toString(), course: course1.toString(), bimester: 2, academicYear: 2025, scores: [{ evaluationId: eval4.toString(), score: 15, weight: 2.0 }, { evaluationId: eval5.toString(), score: 17, weight: 1.0 }], average: 15.7, status: "abierto", teacher: docenteId.toString(), createdAt: new Date(), updatedAt: new Date() },
+  { student: student2.toString(), course: course1.toString(), bimester: 2, academicYear: 2026, scores: [{ evaluationId: eval4.toString(), score: 15, weight: 2.0 }, { evaluationId: eval5.toString(), score: 17, weight: 1.0 }], average: 15.7, status: "abierto", teacher: docenteId.toString(), createdAt: new Date(), updatedAt: new Date() },
 ]);
 print("✓ 5 Grades created");
 
@@ -328,8 +328,8 @@ attendanceDates.forEach(d => {
   students3A.forEach((sid, idx) => {
     let status = "present";
     let arrivalTime = "07:55";
-    if (d === "2025-06-04" && idx === 2) { status = "absent"; arrivalTime = null; }
-    if (d === "2025-06-09" && idx === 1) { status = "late"; arrivalTime = "08:12"; }
+    if (d === "2026-06-04" && idx === 2) { status = "absent"; arrivalTime = null; }
+    if (d === "2026-06-09" && idx === 1) { status = "late"; arrivalTime = "08:12"; }
     attendanceRecords.push({
       student: sid, course: course1.toString(), teacher: docenteId.toString(), date: d,
       status, arrivalTime, observations: status === "absent" ? "Sin justificación" : "",
@@ -342,19 +342,19 @@ print("✓ " + attendanceRecords.length + " Attendance records created");
 
 // ===== 14. EVENTS =====
 db.events.insertMany([
-  { title: "Examen Parcial - Matemática 3°A", date: "2025-06-20", time: "08:00", type: "exam", description: "Examen del segundo bimestre de Matemática", location: "Aula 201", participants: students3A, notifyStudents: true, notifyParents: true, notifyTeachers: false, createdBy: docenteId.toString(), isActive: true, createdAt: new Date(), updatedAt: new Date() },
-  { title: "Reunión de Padres de Familia", date: "2025-06-25", time: "18:00", type: "meeting", description: "Reunión informativa del segundo bimestre", location: "Auditorio", participants: [], notifyStudents: false, notifyParents: true, notifyTeachers: true, createdBy: adminId.toString(), isActive: true, createdAt: new Date(), updatedAt: new Date() },
-  { title: "Día de la Bandera", date: "2025-06-07", time: "09:00", type: "activity", description: "Ceremonia por el Día de la Bandera", location: "Patio central", participants: [], notifyStudents: true, notifyParents: true, notifyTeachers: true, createdBy: adminId.toString(), isActive: true, createdAt: new Date(), updatedAt: new Date() },
-  { title: "Feriado - Día del Maestro", date: "2025-07-06", time: "", type: "holiday", description: "No hay clases", location: "", participants: [], notifyStudents: true, notifyParents: true, notifyTeachers: true, createdBy: adminId.toString(), isActive: true, createdAt: new Date(), updatedAt: new Date() },
-  { title: "Entrega de Proyecto - CyT", date: "2025-06-30", time: "11:00", type: "deadline", description: "Fecha límite para entregar el proyecto de ciencias", location: "Laboratorio 1", participants: students3A, notifyStudents: true, notifyParents: false, notifyTeachers: false, createdBy: docente3Id.toString(), isActive: true, createdAt: new Date(), updatedAt: new Date() },
+  { title: "Examen Parcial - Matemática 3°A", date: "2026-06-20", time: "08:00", type: "exam", description: "Examen del segundo bimestre de Matemática", location: "Aula 201", participants: students3A, notifyStudents: true, notifyParents: true, notifyTeachers: false, createdBy: docenteId.toString(), isActive: true, createdAt: new Date(), updatedAt: new Date() },
+  { title: "Reunión de Padres de Familia", date: "2026-06-25", time: "18:00", type: "meeting", description: "Reunión informativa del segundo bimestre", location: "Auditorio", participants: [], notifyStudents: false, notifyParents: true, notifyTeachers: true, createdBy: adminId.toString(), isActive: true, createdAt: new Date(), updatedAt: new Date() },
+  { title: "Día de la Bandera", date: "2026-06-07", time: "09:00", type: "activity", description: "Ceremonia por el Día de la Bandera", location: "Patio central", participants: [], notifyStudents: true, notifyParents: true, notifyTeachers: true, createdBy: adminId.toString(), isActive: true, createdAt: new Date(), updatedAt: new Date() },
+  { title: "Feriado - Día del Maestro", date: "2026-07-06", time: "", type: "holiday", description: "No hay clases", location: "", participants: [], notifyStudents: true, notifyParents: true, notifyTeachers: true, createdBy: adminId.toString(), isActive: true, createdAt: new Date(), updatedAt: new Date() },
+  { title: "Entrega de Proyecto - CyT", date: "2026-06-30", time: "11:00", type: "deadline", description: "Fecha límite para entregar el proyecto de ciencias", location: "Laboratorio 1", participants: students3A, notifyStudents: true, notifyParents: false, notifyTeachers: false, createdBy: docente3Id.toString(), isActive: true, createdAt: new Date(), updatedAt: new Date() },
 ]);
 print("✓ 5 Events created");
 
 // ===== 15. NOTIFICATIONS =====
 db.notifications.insertMany([
-  { recipient: alumnoId.toString(), title: "Nota publicada", message: "Se ha publicado tu nota del Examen Parcial B1 de Matemática: 16", type: "grade", data: { courseId: course1.toString(), bimester: 1 }, isRead: true, readAt: new Date("2025-05-10"), createdAt: new Date("2025-05-09"), updatedAt: new Date() },
+  { recipient: alumnoId.toString(), title: "Nota publicada", message: "Se ha publicado tu nota del Examen Parcial B1 de Matemática: 16", type: "grade", data: { courseId: course1.toString(), bimester: 1 }, isRead: true, readAt: new Date("2026-05-10"), createdAt: new Date("2026-05-09"), updatedAt: new Date() },
   { recipient: alumnoId.toString(), title: "Próximo examen", message: "Tienes un examen de Matemática el 20 de junio a las 08:00", type: "event", data: {}, isRead: false, createdAt: new Date(), updatedAt: new Date() },
-  { recipient: padreId.toString(), title: "Notas del Bimestre I", message: "Las notas del primer bimestre de Juan Perez ya están disponibles", type: "grade", data: { studentId: student1.toString() }, isRead: true, readAt: new Date("2025-05-10"), createdAt: new Date("2025-05-09"), updatedAt: new Date() },
+  { recipient: padreId.toString(), title: "Notas del Bimestre I", message: "Las notas del primer bimestre de Juan Perez ya están disponibles", type: "grade", data: { studentId: student1.toString() }, isRead: true, readAt: new Date("2026-05-10"), createdAt: new Date("2026-05-09"), updatedAt: new Date() },
   { recipient: padreId.toString(), title: "Reunión de padres", message: "Se ha programado una reunión de padres para el 25 de junio a las 18:00", type: "event", data: {}, isRead: false, createdAt: new Date(), updatedAt: new Date() },
   { recipient: docenteId.toString(), title: "Cierre de notas", message: "Recuerde cerrar las notas del Bimestre II antes del 18 de julio", type: "info", data: {}, isRead: false, createdAt: new Date(), updatedAt: new Date() },
   { recipient: adminId.toString(), title: "Resumen semanal", message: "95% de asistencia esta semana. 3 justificaciones pendientes.", type: "info", data: {}, isRead: false, createdAt: new Date(), updatedAt: new Date() },
@@ -363,7 +363,7 @@ print("✓ 6 Notifications created");
 
 // ===== 16. JUSTIFICATION =====
 db.justifications.insertOne({
-  student: student3.toString(), parent: null, dates: [new Date("2025-06-04")],
+  student: student3.toString(), parent: null, dates: [new Date("2026-06-04")],
   reason: "Enfermedad", observations: "El alumno presentó malestar estomacal",
   documents: [], coursesAffected: [course1.toString()],
   status: "pending", createdAt: new Date(), updatedAt: new Date()
@@ -375,7 +375,7 @@ print("\n========================================");
 print("  SEED DATA COMPLETE");
 print("========================================");
 print("Institution: IEP Continental Americano");
-print("Academic Year: 2025 (Bimestre II activo)");
+print("Academic Year: 2026 (Bimestre II activo)");
 print("Grade Levels: 11 (6 primaria + 5 secundaria)");
 print("Subjects: 8");
 print("Classrooms: 3 (3°A, 4°A, 5°A Secundaria)");
