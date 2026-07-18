@@ -25,6 +25,11 @@ public class LocationService {
 
     private static final Logger logger = LoggerFactory.getLogger(LocationService.class);
 
+    private static final double EARTH_RADIUS_M = 6_371_000;
+    private static final double SCHOOL_LAT = -10.9279;
+    private static final double SCHOOL_LON = -74.8723;
+    private static final double SCHOOL_RADIUS_M = 200;
+
     private final LocationRepository locationRepository;
     private final StudentRepository studentRepository;
     private final ParentRepository parentRepository;
@@ -47,9 +52,47 @@ public class LocationService {
         if (location.getClientTimestamp() == null) {
             location.setClientTimestamp(Instant.now());
         }
+        applyGeofence(location);
         Location saved = locationRepository.save(location);
-        logger.debug("Ubicacion registrada para usuario: {}", saved.getUser());
+        logger.debug("Ubicacion registrada para usuario: {} | dentro del perimetro: {}",
+                saved.getUser(), saved.getInsidePerimeter());
         return saved;
+    }
+
+    private void applyGeofence(Location location) {
+        Double lat = location.getLatitude();
+        Double lon = location.getLongitude();
+        if (lat == null || lon == null) return;
+        double distance = haversineDistance(lat, lon, SCHOOL_LAT, SCHOOL_LON);
+        location.setDistanceToSchool(Math.round(distance * 10.0) / 10.0);
+        location.setInsidePerimeter(distance <= SCHOOL_RADIUS_M);
+    }
+
+    private double haversineDistance(double lat1, double lon1, double lat2, double lon2) {
+        double dLat = Math.toRadians(lat2 - lat1);
+        double dLon = Math.toRadians(lon2 - lon1);
+        double a = Math.sin(dLat / 2) * Math.sin(dLat / 2)
+                + Math.cos(Math.toRadians(lat1)) * Math.cos(Math.toRadians(lat2))
+                * Math.sin(dLon / 2) * Math.sin(dLon / 2);
+        return EARTH_RADIUS_M * 2 * Math.atan2(Math.sqrt(a), Math.sqrt(1 - a));
+    }
+
+    public void timeoutStaleLocations(int timeoutMinutes) {
+        Instant cutoff = Instant.now().minus(timeoutMinutes, ChronoUnit.MINUTES);
+        int count = 0;
+        for (Student student : studentRepository.findByIsActiveTrue()) {
+            Location last = findLastByStudent(student);
+            if (last != null && last.isOnline()
+                    && last.getCreatedAt() != null && last.getCreatedAt().isBefore(cutoff)) {
+                last.setSessionStatus("offline");
+                locationRepository.save(last);
+                count++;
+            }
+        }
+        if (count > 0) {
+            logger.info("Auto-timeout: {} estudiantes marcados offline (sin actividad por {} min)",
+                    count, timeoutMinutes);
+        }
     }
 
     public Location findById(String id) {
@@ -119,12 +162,23 @@ public class LocationService {
                 .filter(Objects::nonNull)
                 .filter(level -> level <= 20)
                 .count();
+        long insidePerimeter = studentLocations.stream()
+                .filter(l -> Boolean.TRUE.equals(l.getInsidePerimeter()))
+                .count();
+        long outsidePerimeter = studentLocations.stream()
+                .filter(l -> Boolean.FALSE.equals(l.getInsidePerimeter()))
+                .count();
 
         Map<String, Object> stats = new LinkedHashMap<>();
         stats.put("trackedStudents", studentLocations.size());
         stats.put("online", online);
         stats.put("offline", offline);
+        stats.put("insidePerimeter", insidePerimeter);
+        stats.put("outsidePerimeter", outsidePerimeter);
         stats.put("lowBattery", lowBattery);
+        stats.put("schoolLat", SCHOOL_LAT);
+        stats.put("schoolLon", SCHOOL_LON);
+        stats.put("schoolRadiusM", SCHOOL_RADIUS_M);
         stats.put("updatedAt", Instant.now());
         return stats;
     }

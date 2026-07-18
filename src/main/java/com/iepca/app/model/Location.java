@@ -49,6 +49,10 @@ public class Location {
 
     private Double batteryLevel;
 
+    private Boolean insidePerimeter;
+
+    private Double distanceToSchool;
+
     @Builder.Default
     private String networkType = "unknown"; // wifi, mobile, none, unknown
 
@@ -108,6 +112,16 @@ public class Location {
     @JsonProperty("isOnline")
     public boolean isOnline() {
         return "online".equalsIgnoreCase(sessionStatus);
+    }
+
+    @JsonProperty("insidePerimeter")
+    public Boolean getInsidePerimeter() {
+        return insidePerimeter;
+    }
+
+    @JsonProperty("distanceToSchool")
+    public Double getDistanceToSchool() {
+        return distanceToSchool;
     }
 
     @JsonProperty("timestamp")

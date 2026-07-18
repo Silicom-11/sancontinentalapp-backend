@@ -23,6 +23,12 @@ public class MaintenanceScheduler {
         this.locationRetentionDays = locationRetentionDays;
     }
 
+    // GPS: Auto-timeout - marca offline a estudiantes sin actividad en 5 minutos
+    @Scheduled(fixedRate = 300_000)
+    public void timeoutStaleGpsLocations() {
+        locationService.timeoutStaleLocations(5);
+    }
+
     // PREVENTIVO: Limpieza diaria de ubicaciones antiguas (2:00 AM)
     @Scheduled(cron = "${maintenance.cleanup-cron:0 0 2 * * *}")
     public void cleanOldLocationRecords() {
