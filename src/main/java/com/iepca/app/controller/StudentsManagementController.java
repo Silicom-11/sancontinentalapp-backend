@@ -2,11 +2,13 @@ package com.iepca.app.controller;
 
 import com.iepca.app.dto.response.ApiResponse;
 import com.iepca.app.model.Student;
+import com.iepca.app.model.embedded.Guardian;
 import com.iepca.app.service.StudentService;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.web.bind.annotation.*;
 
+import java.util.ArrayList;
 import java.util.List;
 import java.util.Map;
 
@@ -85,18 +87,26 @@ public class StudentsManagementController {
     }
 
     @PostMapping("/{id}/guardians")
-    public ResponseEntity<ApiResponse<Void>> addGuardian(
+    public ResponseEntity<ApiResponse<Student>> addGuardian(
             @PathVariable String id,
-            @RequestBody Map<String, String> body) {
-        // Link guardian to student
-        return ResponseEntity.ok(ApiResponse.<Void>ok("Apoderado vinculado"));
+            @RequestBody Guardian guardian) {
+        Student student = studentService.findById(id);
+        if (student.getGuardians() == null) student.setGuardians(new ArrayList<>());
+        student.getGuardians().add(guardian);
+        Student updated = studentService.update(id, student);
+        return ResponseEntity.ok(ApiResponse.ok("Apoderado vinculado", updated));
     }
 
     @DeleteMapping("/{id}/guardians/{guardianId}")
-    public ResponseEntity<ApiResponse<Void>> removeGuardian(
+    public ResponseEntity<ApiResponse<Student>> removeGuardian(
             @PathVariable String id,
             @PathVariable String guardianId) {
-        return ResponseEntity.ok(ApiResponse.<Void>ok("Apoderado desvinculado"));
+        Student student = studentService.findById(id);
+        if (student.getGuardians() != null) {
+            student.getGuardians().removeIf(g -> guardianId.equals(g.getStudent()));
+        }
+        Student updated = studentService.update(id, student);
+        return ResponseEntity.ok(ApiResponse.ok("Apoderado desvinculado", updated));
     }
 }
 

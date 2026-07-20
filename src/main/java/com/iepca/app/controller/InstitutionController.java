@@ -35,9 +35,10 @@ public class InstitutionController {
     }
 
     @GetMapping
-    public ResponseEntity<ApiResponse<List<Institution>>> getInstitution() {
+    public ResponseEntity<ApiResponse<Institution>> getInstitution() {
         List<Institution> institutions = institutionService.findAll();
-        return ResponseEntity.ok(ApiResponse.ok(institutions));
+        Institution institution = institutions.isEmpty() ? null : institutions.get(0);
+        return ResponseEntity.ok(ApiResponse.ok(institution));
     }
 
     @PutMapping

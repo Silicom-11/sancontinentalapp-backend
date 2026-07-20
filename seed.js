@@ -31,7 +31,7 @@ const alumnoId = requireUser("alumno@iepca.edu.pe");
 
 // Extra demo users inserted directly for admin CRUD screens.
 // Password hash for "Test1234!" - BCrypt(10)
-const passHash = "$2a$10$LKnICS1XVH6.GCFsGnQzm.xKPWGRX8BXjG4IcRqLT3L5RQhE7WUKy";
+const passHash = "$2a$10$oTtheWmVTYGwlEqTvvGabezOVajBmuSoADeIZlNR/fYpHgyDyAoz6";
 
 const docente2Id = ObjectId();
 const docente3Id = ObjectId();
